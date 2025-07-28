@@ -1,7 +1,8 @@
 // frontend/src/js/modules/productList.js
 
-// A função de renderizar agora aceita uma URL como parâmetro
-async function fetchAndRenderProducts(apiUrl = 'http://127.0.0.1:3000/api/produtos') {
+import { API_BASE_URL } from '../apiConfig.js'; // 1. Importa a URL do nosso novo arquivo
+
+async function fetchAndRenderProducts(apiUrl = `${API_BASE_URL}/api/produtos`) { // 2. Usa a variável
     const productGrid = document.querySelector('.product-grid');
     if (!productGrid) return null;
 
@@ -10,9 +11,10 @@ async function fetchAndRenderProducts(apiUrl = 'http://127.0.0.1:3000/api/produt
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error(`Erro de rede! Status: ${response.status}`);
+
         const products = await response.json();
-        
         productGrid.innerHTML = '';
+
         if (products.length === 0) {
             productGrid.innerHTML = '<p>Nenhum produto encontrado com estes filtros.</p>';
             return null;
@@ -21,8 +23,14 @@ async function fetchAndRenderProducts(apiUrl = 'http://127.0.0.1:3000/api/produt
         products.forEach(product => {
             const card = document.createElement('div');
             card.className = 'product-card';
-            const imageUrl = product.imagens && product.imagens.length > 0 ? `http://127.0.0.1:3000/${product.imagens[0].url}` : 'https://via.placeholder.com/300x300.png?text=Sem+Imagem';
+
+            // 3. Usa a variável para as imagens também
+            const imageUrl = product.imagens && product.imagens.length > 0
+                ? `${API_BASE_URL}/${product.imagens[0].url}`
+                : 'https://via.placeholder.com/300x300.png?text=Sem+Imagem';
+
             const price = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
             card.innerHTML = `
                 <div class="card-image"><a href="detalhes_produto.html?id=${product.id}"><img src="${imageUrl}" alt="${product.nome}"></a></div>
                 <div class="card-content">
@@ -44,6 +52,7 @@ async function fetchAndRenderProducts(apiUrl = 'http://127.0.0.1:3000/api/produt
         return null;
     }
 }
+
 
 // Lógica de adicionar ao carrinho
 function handleAddToCart(event, products) {
