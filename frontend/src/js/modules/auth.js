@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '../apiConfig.js';
+
 const loginForm = document.getElementById('login-form');
 const errorMessage = document.getElementById('error-message');
 
