@@ -37,8 +37,6 @@ async function fetchFeaturedProducts() {
                     <button class="btn btn-primary full-width add-to-cart-btn" data-product-id="${product.id}">Adicionar ao Carrinho</button>
                 </div>
             `;
-            // ==========================================
-
             featuredGrid.appendChild(card);
         });
         

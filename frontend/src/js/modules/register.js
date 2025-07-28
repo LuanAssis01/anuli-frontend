@@ -18,7 +18,8 @@ registerForm.addEventListener('submit', async (event) => {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/users/`, {
+        // CORREÇÃO: Removida a barra '/' do final
+        const response = await fetch(`${API_BASE_URL}/api/users`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -37,8 +38,6 @@ registerForm.addEventListener('submit', async (event) => {
             errorMessage.textContent = data.message || 'Erro ao criar conta.';
             return;
         }
-
-        console.log('Conta criada com sucesso:', data);
 
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('userInfo', JSON.stringify(data.user));

@@ -25,7 +25,7 @@ async function initProductForm() {
     const stockInput = document.getElementById('quantidade_estoque');
     const categoryInput = document.getElementById('categoria_id');
     const skuInput = document.getElementById('sku');
-    const imageInput = document.getElementById('imagem');
+    const imageInput = document.getElementById('imagens'); // Corrigido para 'imagens'
     const imagePreviewContainer = document.getElementById('image-preview');
 
     // --- Detecção de Modo (Criar vs. Editar) ---
@@ -58,7 +58,7 @@ async function initProductForm() {
     if (isEditMode) {
         formTitle.textContent = 'Editar Produto';
         try {
-            const response = await fetch(`http://127.0.0.1:3000/api/produtos/${productId}`);
+            const response = await fetch(`${API_BASE_URL}/api/produtos/${productId}`);
             if (!response.ok) throw new Error('Produto não encontrado');
             const product = await response.json();
             
@@ -70,14 +70,32 @@ async function initProductForm() {
             categoryInput.value = product.categoria_id;
 
             if (product.imagens && product.imagens.length > 0) {
-                const currentImageUrl = `http://127.0.0.1:3000/${product.imagens[0].url}`;
-                imagePreviewContainer.innerHTML = `<p>Imagem Atual:</p><img src="${currentImageUrl}" alt="Imagem atual" style="max-width: 150px; border-radius: 6px;">`;
+                imagePreviewContainer.innerHTML = `<p>Imagens Atuais:</p>`;
+                product.imagens.forEach(img => {
+                    const currentImageUrl = `${API_BASE_URL}/${img.url}`;
+                    imagePreviewContainer.innerHTML += `<img src="${currentImageUrl}" alt="Imagem atual" style="max-width: 100px; border-radius: 6px; margin: 5px;">`;
+                });
             }
         } catch (error) {
             console.error('Erro ao buscar dados do produto para edição:', error);
             alert('Não foi possível carregar os dados do produto.');
         }
     }
+
+    // --- Lógica de Pré-visualização de Novas Imagens ---
+    imageInput.addEventListener('change', () => {
+        imagePreviewContainer.innerHTML = '<p>Novas Imagens:</p>'; // Limpa as imagens atuais para mostrar as novas
+        for (const file of imageInput.files) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style = "max-width: 100px; border-radius: 6px; margin: 5px;";
+                imagePreviewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
     // --- Lógica de Envio do Formulário ---
     form.addEventListener('submit', async (event) => {
@@ -91,14 +109,15 @@ async function initProductForm() {
         formData.append('categoria_id', categoryInput.value);
         formData.append('sku', skuInput.value);
 
-        if (imageInput.files[0]) {
-            formData.append('imagem', imageInput.files[0]);
+        // Adiciona todas as novas imagens selecionadas
+        for (const file of imageInput.files) {
+            formData.append('imagens', file);
         }
 
         const method = isEditMode ? 'PUT' : 'POST';
         const url = isEditMode 
-            ? `http://127.0.0.1:3000/api/produtos/${productId}` 
-            : 'http://127.0.0.1:3000/api/produtos';
+            ? `${API_BASE_URL}/api/produtos/${productId}` 
+            : `${API_BASE_URL}/api/produtos`;
         
         try {
             const token = localStorage.getItem('authToken');
