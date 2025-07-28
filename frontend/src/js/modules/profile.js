@@ -1,4 +1,5 @@
 // frontend/src/js/modules/profile.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const accountForm = document.getElementById('account-form');
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // 3. Envia a requisição para a API
-            const response = await fetch(`http://localhost:3000/api/users/${userInfo.id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/users/${userInfo.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 // frontend/src/js/modules/addresses.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('authToken');
@@ -10,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:3000/api/enderecos/usuario/${userInfo.id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/enderecos/usuario/${userInfo.id}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

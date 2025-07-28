@@ -1,4 +1,5 @@
 // frontend/src/js/modules/orders.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('authToken');
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // Faz a requisição para a API, passando o ID do usuário na URL
-        const response = await fetch(`http://127.0.0.1:3000/api/pedidos/usuario/${userInfo.id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/pedidos/usuario/${userInfo.id}`, {
             method: 'GET',
             headers: {
                 // ESTE É O PASSO CRUCIAL: Envia o token para autorização

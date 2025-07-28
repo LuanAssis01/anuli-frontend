@@ -1,4 +1,5 @@
 // frontend/src/js/modules/product-detail.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Pega o ID do produto da URL
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // 2. Busca os dados do produto específico na API
-        const response = await fetch(`http://127.0.0.1:3000/api/produtos/${productId}`);
+        const response = await fetch(`${API_BASE_URL}/api/produtos/${productId}`);
         if (!response.ok) {
             throw new Error('Produto não encontrado.');
         }

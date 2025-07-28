@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '../apiConfig.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const checkoutForm = document.getElementById('checkout-form');
     const summaryItemsContainer = document.getElementById('checkout-summary-items');
@@ -19,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemTotal = item.price * item.quantity;
             total += itemTotal;
             
-            const imageUrl = `http://127.0.0.1:3000/${item.image}`;
+            const imageUrl = `${API_BASE_URL}/${item.image}`;
 
             const itemHTML = `
                 <div class="summary-item">
@@ -61,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('http://127.0.0.1:3000/api/pedidos', {
+            const response = await fetch(`${API_BASE_URL}/api/pedidos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(orderPayload)

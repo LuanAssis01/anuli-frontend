@@ -1,4 +1,5 @@
 // frontend/src/js/modules/add-address.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const addAddressForm = document.getElementById('add-address-form');
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                const response = await fetch('http://localhost:3000/api/enderecos', {
+                const response = await fetch(`${API_BASE_URL}/api/enderecos`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

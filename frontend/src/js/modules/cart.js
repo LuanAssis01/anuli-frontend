@@ -1,4 +1,5 @@
 // frontend/src/js/modules/cart.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 // ⭐ NOVA FUNÇÃO DE SEGURANÇA ⭐
 function checkAuth() {

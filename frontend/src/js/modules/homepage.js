@@ -1,11 +1,12 @@
 // frontend/src/js/modules/homepage.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 async function fetchFeaturedProducts() {
     const featuredGrid = document.querySelector('.featured-products-section .product-grid');
     if (!featuredGrid) return null;
 
     try {
-        const response = await fetch('http://127.0.0.1:3000/api/produtos?limit=4');
+        const response = await fetch(`${API_BASE_URL}/api/produtos?limit=4`);
         if (!response.ok) throw new Error('Falha ao buscar produtos em destaque');
 
         const products = await response.json();
@@ -16,14 +17,11 @@ async function fetchFeaturedProducts() {
             card.className = 'product-card';
 
             const imageUrl = product.imagens && product.imagens.length > 0
-                ? `http://127.0.0.1:3000/${product.imagens[0].url}`
+                ? `${API_BASE_URL}/${product.imagens[0].url}`
                 : 'https://via.placeholder.com/300x300.png?text=Sem+Imagem';
             
             const price = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-            // ==========================================
-            // ⭐ CORREÇÃO DO ERRO DE SINTAXE AQUI ⭐
-            // ==========================================
+            
             card.innerHTML = `
                 <div class="card-image">
                     <a href="detalhes_produto.html?id=${product.id}">

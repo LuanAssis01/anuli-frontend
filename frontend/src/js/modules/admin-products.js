@@ -1,4 +1,5 @@
 // frontend/src/js/modules/admin-products.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 // Função de segurança para verificar se o usuário é admin
 function checkAdminAuth() {
@@ -20,7 +21,7 @@ async function fetchAndRenderAdminProducts() {
 
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch('http://127.0.0.1:3000/api/produtos', {
+        const response = await fetch(`${API_BASE_URL}/api/produtos`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -47,7 +48,7 @@ async function fetchAndRenderAdminProducts() {
             }
 
             const imageUrl = product.imagens && product.imagens.length > 0
-                ? `http://127.0.0.1:3000/${product.imagens[0].url}`
+                ? `${API_BASE_URL}/${product.imagens[0].url}`
                 : 'https://via.placeholder.com/60x60.png?text=N/A';
 
             row.innerHTML = `
@@ -93,7 +94,7 @@ async function handleDeleteProduct(event) {
     const token = localStorage.getItem('authToken');
 
     try {
-        const response = await fetch(`http://127.0.0.1:3000/api/produtos/${productId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/produtos/${productId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`

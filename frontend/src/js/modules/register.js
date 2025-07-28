@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '../apiConfig.js';
+
 const registerForm = document.getElementById('register-form');
 const errorMessage = document.getElementById('error-message');
 
@@ -16,7 +18,7 @@ registerForm.addEventListener('submit', async (event) => {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:3000/api/users/', {
+        const response = await fetch(`${API_BASE_URL}/api/users/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

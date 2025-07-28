@@ -19,3 +19,16 @@ function updateHeaderBasedOnLogin() {
 }
 
 document.addEventListener('DOMContentLoaded', updateHeaderBasedOnLogin);
+
+// Adicione este código no seu arquivo global.js
+const searchForm = document.getElementById('header-search-form');
+if (searchForm) {
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const query = e.target.elements.q.value;
+        if (query.trim()) {
+            // Redireciona para a página de resultados com o termo da busca
+            window.location.href = `/frontend/src/html/resultados-busca.html?q=${encodeURIComponent(query)}`;
+        }
+    });
+}

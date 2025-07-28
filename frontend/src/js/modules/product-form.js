@@ -1,4 +1,5 @@
 // frontend/src/js/modules/product-form.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 // Função de segurança para verificar se o usuário é admin
 function checkAdminAuth() {
@@ -35,7 +36,7 @@ async function initProductForm() {
     // --- Função para carregar categorias no select ---
     async function loadCategories() {
         try {
-            const response = await fetch('http://127.0.0.1:3000/api/categoria');
+            const response = await fetch(`${API_BASE_URL}/api/categoria`);
             if (!response.ok) throw new Error('Falha ao carregar categorias');
             const categories = await response.json();
             

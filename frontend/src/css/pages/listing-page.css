@@ -1,7 +1,3 @@
-/* =================================
-   Página: Listagem de Produtos
-   ================================= */
-
 .listing-page-container {
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -11,11 +7,6 @@
 }
 
 /* --- Sidebar de Filtros --- */
-
-.filters-sidebar .btn {
-    margin-top: 15px;
-}
-
 .filters-sidebar {
     background-color: var(--cinza-claro);
     padding: 24px;
@@ -55,12 +46,24 @@
     border-radius: 4px;
 }
 
+.filters-sidebar .btn {
+    margin-top: 15px;
+}
+
 /* --- Grade de Produtos e Header --- */
 .grid-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; /* Mantém o alinhamento central */
     margin-bottom: 20px;
+    padding-bottom: 15px; /* Adiciona um espaço abaixo */
+    border-bottom: 1px solid #eee; /* Adiciona uma linha sutil de separação */
+}
+
+/* ⭐ CORREÇÃO AQUI ⭐ */
+.grid-header h2 {
+    margin: 0; /* Remove a margem padrão do título que causa o desalinhamento */
+    font-size: 28px;
 }
 
 .grid-header select {
@@ -78,6 +81,7 @@
 }
 
 /* --- Responsividade da Página --- */
+
 @media (max-width: 1200px) {
     .listing-page-container {
         grid-template-columns: 220px 1fr;
@@ -94,114 +98,4 @@
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-}
-
-/* =================================
-   Componente: Card de Produto
-   ================================= */
-
-.product-card {
-    background-color: var(--branco-fundo);
-    border: 1px solid #f0f0f0;
-    border-radius: var(--raio-borda);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-.card-image img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-}
-
-.product-card:hover .card-image img {
-    transform: scale(1.05);
-}
-
-.card-content {
-    padding: 15px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.card-info-wrapper {
-    flex-grow: 1;
-}
-
-.card-category {
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 8px;
-}
-
-.card-title {
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
-.card-price {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--azul-principal);
-    margin-bottom: 15px;
-}
-
-/* =================================
-   Componente: Botão
-   ================================= */
-   
-.btn {
-  display: inline-block;
-  padding: 10px 16px;
-  border: none;
-  border-radius: var(--raio-borda);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-.btn-primary {
-  background-color: var(--azul-principal);
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background-color: #02214b; /* Tom mais escuro de azul */
-}
-
-.btn-secondary {
-    background-color: transparent;
-    color: var(--azul-principal);
-    border: 2px solid var(--azul-principal);
-}
-
-.btn-secondary:hover {
-    background-color: var(--azul-principal);
-    color: var(--branco-fundo);
-}
-
-.full-width {
-  width: 100%;
 }

@@ -1,4 +1,6 @@
 // frontend/src/js/modules/reset-password.js
+import { API_BASE_URL } from '../apiConfig.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('reset-password-form');
     const messageElement = document.getElementById('form-message');
@@ -28,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageElement.textContent = 'Salvando...';
 
         try {
-            const response = await fetch(`http://127.0.0.1:3000/api/users/reset-password/${token}`, {
+            const response = await fetch(`${API_BASE_URL}/api/users/reset-password/${token}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nova_senha: newPassword })

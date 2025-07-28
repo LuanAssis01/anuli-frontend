@@ -1,4 +1,5 @@
 // frontend/src/js/modules/admin-orders.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 // Função de segurança para verificar se o usuário é admin
 function checkAdminAuth() {
@@ -20,7 +21,7 @@ async function fetchAndRenderAdminOrders() {
 
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch('http://127.0.0.1:3000/api/pedidos', {
+        const response = await fetch(`${API_BASE_URL}/api/pedidos`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) throw new Error('Falha ao buscar pedidos.');
@@ -76,7 +77,7 @@ async function handleStatusChange(event) {
     const token = localStorage.getItem('authToken');
 
     try {
-        const response = await fetch(`http://127.0.0.1:3000/api/pedidos/${orderId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/pedidos/${orderId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify({ status: newStatus })

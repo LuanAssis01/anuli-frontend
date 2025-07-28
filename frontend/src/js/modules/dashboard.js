@@ -1,4 +1,5 @@
 // frontend/src/js/modules/dashboard.js
+import { API_BASE_URL } from '../apiConfig.js';
 
 // Função de segurança para verificar se o usuário é admin
 function checkAdminAuth() {
@@ -27,8 +28,8 @@ async function populateDashboard() {
 
         // Faz as chamadas à API para produtos e pedidos em paralelo para ser mais rápido
         const [productsResponse, ordersResponse] = await Promise.all([
-            fetch('http://127.0.0.1:3000/api/produtos', { headers }),
-            fetch('http://127.0.0.1:3000/api/pedidos', { headers })
+            fetch(`${API_BASE_URL}/api/produtos`, { headers }),
+            fetch(`${API_BASE_URL}/api/pedidos`, { headers })
         ]);
 
         if (!productsResponse.ok || !ordersResponse.ok) {

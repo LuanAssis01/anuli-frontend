@@ -1,4 +1,6 @@
 // frontend/src/js/modules/forgot-password.js
+import { API_BASE_URL } from '../apiConfig.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('forgot-password-form');
     const messageElement = document.getElementById('form-message');
@@ -9,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageElement.textContent = 'Enviando...';
 
         try {
-            const response = await fetch('http://127.0.0.1:3000/api/users/forgot-password', {
+            const response = await fetch(`${API_BASE_URL}/api/users/forgot-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email_usuario: email })
