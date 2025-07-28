@@ -1,11 +1,12 @@
 // frontend/src/js/apiConfig.js
 
-// Define a URL base da sua API.
-// Quando estiver desenvolvendo localmente, você pode comentar a linha de produção
-// e descomentar a linha de desenvolvimento.
+// Verifica se o site está rodando no ambiente local (desenvolvimento)
+const isDevelopment = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
 
-// URL de Produção (para o site no ar)
-export const API_BASE_URL = 'https://anuli-backend.onrender.com/';
+// Define a URL base da API com base no ambiente
+export const API_BASE_URL = isDevelopment
+  ? 'http://127.0.0.1:3000' // URL para rodar na sua máquina
+  : 'https://anuli-backend.onrender.com'; // URL para o site no ar (produção)
 
-// URL de Desenvolvimento (para rodar na sua máquina)
-// export const API_BASE_URL = 'http://127.0.0.1:3000';
+console.log(`API rodando em modo: ${isDevelopment ? 'Desenvolvimento' : 'Produção'}`);
+console.log(`URL da API: ${API_BASE_URL}`);
