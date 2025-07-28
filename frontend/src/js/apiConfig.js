@@ -5,7 +5,7 @@
 // e descomentar a linha de desenvolvimento.
 
 // URL de Produção (para o site no ar)
-export const API_BASE_URL = 'https://anuli-backend.onrender.com';
+export const API_BASE_URL = 'https://anuli-backend.onrender.com/';
 
 // URL de Desenvolvimento (para rodar na sua máquina)
 // export const API_BASE_URL = 'http://127.0.0.1:3000';
