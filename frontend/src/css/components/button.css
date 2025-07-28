@@ -1,0 +1,60 @@
+/* --- Estilo Base do Botão --- */
+.btn {
+  display: inline-block; /* Permite definir padding e margin */
+  padding: 12px 24px;
+  border: 2px solid transparent; /* Borda transparente para não "pular" no hover */
+  border-radius: var(--raio-borda);
+  font-weight: 600; /* Deixa a fonte um pouco mais forte */
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Efeito suave de transição */
+}
+
+/* --- Botão Primário (Ação Principal) --- */
+.btn-primary {
+  background-color: var(--azul-principal);
+  color: var(--branco-fundo);
+}
+
+.btn-primary:hover {
+  background-color: #02214b; /* Um tom de azul um pouco mais escuro para o hover */
+  transform: translateY(-2px); /* Efeito de "levantar" o botão */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- Botão Secundário (Contorno) --- */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--azul-principal);
+  border-color: var(--azul-principal);
+}
+
+.btn-secondary:hover {
+  background-color: var(--azul-principal);
+  color: var(--branco-fundo);
+  transform: translateY(-2px);
+}
+
+/* --- Botão de Destaque (Amarelo) --- */
+.btn-accent {
+  background-color: var(--amarelo-destaque);
+  color: var(--preto-texto);
+}
+
+.btn-accent:hover {
+  background-color: #e9b207; /* Amarelo um pouco mais escuro */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- Estado Desabilitado --- */
+.btn:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

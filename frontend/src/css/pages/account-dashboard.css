@@ -1,0 +1,242 @@
+/* =================================
+   Página: Layout da Área do Cliente
+   ================================= */
+
+.account-page-container {
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+.account-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+}
+
+/* --- Menu Lateral --- */
+.account-sidebar {
+    border: 1px solid #eee;
+    border-radius: var(--raio-borda);
+    padding: 20px;
+    align-self: start;
+}
+
+.account-sidebar ul li a {
+    display: block;
+    padding: 15px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-bottom: 5px;
+}
+
+.account-sidebar ul li a:hover {
+    background-color: var(--cinza-claro);
+    color: var(--azul-principal);
+}
+
+.account-sidebar ul li a.active {
+    background-color: var(--azul-principal);
+    color: var(--branco-fundo);
+}
+
+/* --- Conteúdo Principal (Direita) --- */
+.account-content h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+/* =================================
+   Conteúdo: Tabela de Pedidos
+   ================================= */
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.orders-table th {
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.status-entregue { background-color: var(--sucesso); }
+.status-enviado { background-color: var(--amarelo-destaque); color: var(--preto-texto); }
+.status-cancelado { background-color: var(--erro); }
+
+.btn-sm {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+/* =================================
+   Conteúdo: Meus Endereços
+   ================================= */
+   
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.content-header h2 {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.addresses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.address-card {
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: var(--raio-borda);
+}
+
+.address-card h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.address-card p {
+    line-height: 1.6;
+    color: #555;
+}
+
+.address-actions {
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.address-actions a {
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 20px;
+}
+
+.action-link-edit { color: var(--azul-principal); }
+.action-link-delete { color: var(--erro); }
+
+/* =================================
+   Conteúdo: Dados Pessoais (Formulário)
+   ================================= */
+
+.account-form fieldset {
+    border: 1px solid #eee;
+    padding: 20px 20px 10px 20px;
+    border-radius: var(--raio-borda);
+    margin-bottom: 30px;
+}
+
+.account-form legend {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 0 10px;
+}
+
+.form-description {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.account-form .form-group {
+    margin-bottom: 20px;
+}
+
+.account-form .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.account-form .form-group input {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: var(--raio-borda);
+}
+
+.account-form .btn {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+/* =================================
+   Conteúdo: Mensagens de Formulário
+   ================================= */
+   
+#form-message {
+    text-align: left;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.success-text { color: var(--sucesso); }
+.error-text { color: var(--erro); }
+
+/* --- Responsividade --- */
+@media (max-width: 900px) {
+    .account-layout {
+        grid-template-columns: 1fr;
+    }
+    .account-sidebar {
+        margin-bottom: 30px;
+    }
+    .account-sidebar ul {
+        display: flex;
+        overflow-x: auto;
+    }
+     .account-sidebar ul li a {
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .orders-table thead {
+        display: none;
+    }
+    .orders-table tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #eee;
+        border-radius: var(--raio-borda);
+    }
+    .orders-table td {
+        display: block;
+        text-align: right;
+        border-bottom: 1px dotted #ccc;
+    }
+    .orders-table td:last-child {
+        border-bottom: none;
+    }
+    .orders-table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 600;
+    }
+}

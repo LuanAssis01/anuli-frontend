@@ -1,0 +1,93 @@
+.main-header {
+  background-color: var(--branco-fundo);
+  padding: 16px 0;
+  border-bottom: 1px solid #eee;
+  position: sticky; /* Faz o header ficar fixo no topo */
+  top: 0;
+  z-index: 1000; /* Garante que ele fique acima de outros conteúdos */
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-logo-text {
+  font-size: 28px;
+  font-weight: 1600; /* Deixa a fonte bem marcada */
+  font: var(--fonte-logo);
+  color: var(--azul-principal); /* Usa a cor principal da sua marca */
+  text-decoration: none;
+  letter-spacing: 3px; /* Um pequeno espaçamento entre as letras dá um toque de design */
+}
+
+/* --- Navegação Principal (Desktop) --- */
+.main-nav ul {
+  display: flex;
+  gap: 32px; /* Espaçamento entre os links */
+}
+
+.main-nav a {
+  font-weight: 500;
+  color: var(--preto-texto);
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.main-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--azul-principal);
+  transition: width 0.3s ease;
+}
+
+.main-nav a:hover::after {
+  width: 100%;
+}
+
+
+/* --- Ícones de Ação --- */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.action-link svg {
+  color: var(--preto-texto);
+  transition: color 0.3s ease;
+}
+
+.action-link:hover svg {
+  color: var(--azul-principal);
+}
+
+
+/* --- Botão do Menu Mobile --- */
+.mobile-nav-toggle {
+  display: none; /* Escondido por padrão no desktop */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+/* =================================
+   Responsividade (Mobile-First)
+   ================================= */
+
+/* Para telas menores que 768px (tablets e celulares) */
+@media (max-width: 768px) {
+  .main-nav {
+    display: none; /* Esconde a navegação principal */
+  }
+
+  .mobile-nav-toggle {
+    display: block; /* Mostra o botão do menu "hambúrguer" */
+  }
+}

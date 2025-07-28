@@ -1,0 +1,51 @@
+/* frontend/src/css/pages/404-page.css */
+
+.container-404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px); /* Tenta ocupar a altura da tela, descontando header/footer */
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.content-404 h1 {
+    font-size: 120px;
+    font-weight: 900;
+    color: var(--azul-principal);
+    margin: 0;
+    line-height: 1;
+}
+
+.content-404 h2 {
+    font-size: 32px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.content-404 p {
+    font-size: 16px;
+    color: #555;
+    max-width: 450px;
+    margin: 0 auto 30px auto;
+    line-height: 1.7;
+}
+
+.actions-404 {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 768px) {
+    .content-404 h1 {
+        font-size: 80px;
+    }
+    .content-404 h2 {
+        font-size: 24px;
+    }
+    .actions-404 {
+        flex-direction: column;
+    }
+}

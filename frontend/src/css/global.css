@@ -1,0 +1,86 @@
+/* Define o box-sizing para ser mais intuitivo */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove margens e paddings padrão */
+body,
+h1, h2, h3, h4, h5, h6,
+p, ol, ul,
+figure,
+blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove estilos de lista padrão */
+ol,
+ul {
+  list-style: none;
+}
+
+/* Garante que imagens e mídias sejam responsivas */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Remove estilos padrão de links e botões */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Herda fontes para inputs e botões */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+
+:root {
+  /* Paleta de Cores */
+  --azul-principal: #032d65;
+  --amarelo-destaque: #FFC107; /* Um tom de amarelo vibrante, pode ser ajustado */
+  --preto-texto: #1C1C1C;      /* Um preto suave para textos */
+  --branco-fundo: #FFFFFF;
+  --cinza-claro: #f8f9fa;      /* Para fundos de seções ou bordas */
+  --sucesso: #28a745;
+  --erro: #dc3545;
+
+  /* Tipografia */
+  --fonte-principal: 'Inter', sans-serif;
+  --fonte-logo: 'SuaFonteDeLogo', sans-serif; /* Se a fonte do logo for específica */
+
+  /* Espaçamentos e Bordas */
+  --raio-borda: 8px;
+}
+
+
+/* =================================
+   3. Estilos Globais (body)
+   ================================= */
+
+body {
+  font-family: var(--fonte-principal);
+  background-color: var(--branco-fundo);
+  color: var(--preto-texto);
+  line-height: 1.6; /* Melhora a legibilidade */
+  -webkit-font-smoothing: antialiased; /* Deixa a fonte mais suave em alguns navegadores */
+}
+
+/* Uma classe utilitária para centralizar conteúdo */
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}

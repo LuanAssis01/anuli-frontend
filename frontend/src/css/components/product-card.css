@@ -1,0 +1,88 @@
+.product-card {
+    background-color: var(--branco-fundo);
+    border: 1px solid #eee;
+    border-radius: var(--raio-borda);
+    overflow: hidden; /* Garante que a imagem não "vaze" do raio da borda */
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card-image {
+    overflow: hidden; /* Para o efeito de zoom na imagem */
+}
+
+.card-image img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1; /* Garante que a imagem seja sempre quadrada */
+    object-fit: cover; /* Evita que a imagem se distorça */
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover .card-image img {
+    transform: scale(1.05); /* Efeito de zoom no hover */
+}
+
+.card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Faz este container crescer para ocupar o espaço */
+    text-align: center;
+}
+
+.card-category {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    flex-grow: 1; /* Empurra o preço para baixo */
+}
+
+.card-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--azul-principal);
+    margin-bottom: 16px;
+}
+
+/* --- Melhoria: Botão aparece no hover --- */
+
+/* Esconde o botão por padrão */
+.product-card .btn {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Mostra o botão quando o mouse está sobre o card */
+.product-card:hover .btn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Adiciona um preenchimento na parte inferior para compensar o espaço do botão que vai aparecer */
+.product-card .card-content {
+    padding-bottom: 54px; /* Altura aproximada do botão + margem */
+    position: relative;
+}
+
+/* Força o botão a ficar na parte inferior do card */
+.product-card .btn {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    width: calc(100% - 32px); /* Largura total menos o padding lateral */
+}

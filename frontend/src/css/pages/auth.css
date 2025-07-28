@@ -1,0 +1,88 @@
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Ocupa boa parte da altura da tela */
+  padding: 40px 0;
+  background-color: var(--cinza-claro);
+}
+
+.form-container {
+  background-color: var(--branco-fundo);
+  padding: 40px;
+  border-radius: var(--raio-borda);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 450px;
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  color: var(--preto-texto);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: var(--raio-borda);
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--azul-principal);
+  box-shadow: 0 0 0 2px rgba(3, 45, 101, 0.2); /* Sombra sutil no foco */
+}
+
+.form-options {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.forgot-password {
+  font-size: 14px;
+  color: var(--azul-principal);
+  font-weight: 500;
+}
+
+.btn.full-width {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.redirect-link {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.redirect-link p {
+  font-size: 15px;
+}
+
+.redirect-link a {
+  color: var(--azul-principal);
+  font-weight: 600;
+}
+
+.error-text {
+    color: var(--erro);
+    text-align: center;
+    margin-top: 15px;
+    font-weight: 500;
+}

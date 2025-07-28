@@ -1,0 +1,44 @@
+/* frontend/src/css/pages/institutional-page.css */
+
+.institutional-page-container {
+    padding-top: 50px;
+    padding-bottom: 60px;
+}
+
+.institutional-page-container .content-wrapper {
+    max-width: 800px; /* Limita a largura do texto para melhor legibilidade */
+    margin: 0 auto;   /* Centraliza o container de texto */
+}
+
+.institutional-page-container h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.institutional-page-container h2 {
+    font-size: 28px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.institutional-page-container p,
+.institutional-page-container ul li {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.institutional-page-container ul {
+    list-style-position: inside;
+}
+
+.institutional-page-container .content-image {
+    width: 100%;
+    border-radius: var(--raio-borda);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
