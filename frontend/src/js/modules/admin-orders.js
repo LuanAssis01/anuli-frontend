@@ -8,7 +8,7 @@ function checkAdminAuth() {
 
     if (!token || userInfo?.tipo_cadastro !== 'admin') {
         alert('Acesso negado. Você precisa ser um administrador.');
-        window.location.href = '../auth/login.html'; 
+        window.location.href = '../auth/login.html';
         return false;
     }
     return true;
@@ -36,19 +36,20 @@ async function fetchAndRenderAdminOrders() {
 
         orders.forEach(order => {
             const row = document.createElement('tr');
-            
-            // ⭐ CORREÇÃO AQUI: Verificações de segurança antes de usar os dados ⭐
-            const customerName = order.usuario ? order.usuario.nome_usuario : 'Cliente Deletado';
-            const orderStatus = order.status || 'indefinido';
+
+            // Define as variáveis de forma segura antes de usá-las
             const formattedDate = new Date(order.data_pedido).toLocaleDateString('pt-BR');
             const formattedTotal = parseFloat(order.valor_total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            const customerName = order.usuario ? order.usuario.nome_usuario : 'Cliente Deletado';
+            const orderStatus = order.status || 'indefinido';
 
+            // Monta o HTML da linha da tabela com as correções
             row.innerHTML = `
-                <td>#${order.id}</td>
-                <td>${formattedDate}</td>
-                <td>${customerName}</td>
-                <td>${formattedTotal}</td>
-                <td>
+                <td data-label="Pedido #"><a href="detalhes-pedido.html?id=${order.id}">#${order.id}</a></td>
+                <td data-label="Data">${formattedDate}</td>
+                <td data-label="Cliente">${customerName}</td>
+                <td data-label="Total">${formattedTotal}</td>
+                <td data-label="Status">
                     <select class="status-select" data-order-id="${order.id}">
                         <option value="aguardando_pagamento" ${orderStatus === 'aguardando_pagamento' ? 'selected' : ''}>Aguardando Pagamento</option>
                         <option value="pago" ${orderStatus === 'pago' ? 'selected' : ''}>Pago</option>
@@ -60,7 +61,6 @@ async function fetchAndRenderAdminOrders() {
             `;
             tableBody.appendChild(row);
         });
-
     } catch (error) {
         console.error('Erro ao carregar pedidos:', error);
         tableBody.innerHTML = '<tr><td colspan="5">Erro ao carregar pedidos.</td></tr>';
@@ -84,7 +84,7 @@ async function handleStatusChange(event) {
         });
 
         if (!response.ok) throw new Error('Falha ao atualizar o status.');
-        
+
         console.log(`Status do pedido #${orderId} atualizado para ${newStatus}`);
 
     } catch (error) {

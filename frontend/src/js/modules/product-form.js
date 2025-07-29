@@ -25,7 +25,7 @@ async function initProductForm() {
     const stockInput = document.getElementById('quantidade_estoque');
     const categoryInput = document.getElementById('categoria_id');
     const skuInput = document.getElementById('sku');
-    const imageInput = document.getElementById('imagens'); // Corrigido para 'imagens'
+    const imageInput = document.getElementById('imagens');
     const imagePreviewContainer = document.getElementById('image-preview');
 
     // --- Detecção de Modo (Criar vs. Editar) ---
@@ -58,6 +58,7 @@ async function initProductForm() {
     if (isEditMode) {
         formTitle.textContent = 'Editar Produto';
         try {
+            // CORRIGIDO: Usando API_BASE_URL
             const response = await fetch(`${API_BASE_URL}/api/produtos/${productId}`);
             if (!response.ok) throw new Error('Produto não encontrado');
             const product = await response.json();
@@ -72,6 +73,7 @@ async function initProductForm() {
             if (product.imagens && product.imagens.length > 0) {
                 imagePreviewContainer.innerHTML = `<p>Imagens Atuais:</p>`;
                 product.imagens.forEach(img => {
+                    // CORRIGIDO: Usando API_BASE_URL
                     const currentImageUrl = `${API_BASE_URL}/${img.url}`;
                     imagePreviewContainer.innerHTML += `<img src="${currentImageUrl}" alt="Imagem atual" style="max-width: 100px; border-radius: 6px; margin: 5px;">`;
                 });
@@ -84,7 +86,7 @@ async function initProductForm() {
 
     // --- Lógica de Pré-visualização de Novas Imagens ---
     imageInput.addEventListener('change', () => {
-        imagePreviewContainer.innerHTML = '<p>Novas Imagens:</p>'; // Limpa as imagens atuais para mostrar as novas
+        imagePreviewContainer.innerHTML = '<p>Novas Imagens:</p>';
         for (const file of imageInput.files) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -109,12 +111,12 @@ async function initProductForm() {
         formData.append('categoria_id', categoryInput.value);
         formData.append('sku', skuInput.value);
 
-        // Adiciona todas as novas imagens selecionadas
         for (const file of imageInput.files) {
             formData.append('imagens', file);
         }
 
         const method = isEditMode ? 'PUT' : 'POST';
+        // CORRIGIDO: Usando API_BASE_URL
         const url = isEditMode 
             ? `${API_BASE_URL}/api/produtos/${productId}` 
             : `${API_BASE_URL}/api/produtos`;
