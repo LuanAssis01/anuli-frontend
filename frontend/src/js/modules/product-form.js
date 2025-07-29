@@ -8,6 +8,7 @@ function checkAdminAuth() {
 
     if (!token || userInfo?.tipo_cadastro !== 'admin') {
         alert('Acesso negado. Você precisa ser um administrador.');
+        // O caminho correto para voltar para o login a partir da pasta /admin/
         window.location.href = '../auth/login.html'; 
         return false;
     }
@@ -25,7 +26,7 @@ async function initProductForm() {
     const stockInput = document.getElementById('quantidade_estoque');
     const categoryInput = document.getElementById('categoria_id');
     const skuInput = document.getElementById('sku');
-    const imageInput = document.getElementById('imagens');
+    const imageInput = document.getElementById('imagens'); // ID para múltiplas imagens
     const imagePreviewContainer = document.getElementById('image-preview');
 
     // --- Detecção de Modo (Criar vs. Editar) ---
@@ -58,7 +59,6 @@ async function initProductForm() {
     if (isEditMode) {
         formTitle.textContent = 'Editar Produto';
         try {
-            // CORRIGIDO: Usando API_BASE_URL
             const response = await fetch(`${API_BASE_URL}/api/produtos/${productId}`);
             if (!response.ok) throw new Error('Produto não encontrado');
             const product = await response.json();
@@ -73,7 +73,6 @@ async function initProductForm() {
             if (product.imagens && product.imagens.length > 0) {
                 imagePreviewContainer.innerHTML = `<p>Imagens Atuais:</p>`;
                 product.imagens.forEach(img => {
-                    // CORRIGIDO: Usando API_BASE_URL
                     const currentImageUrl = `${API_BASE_URL}/${img.url}`;
                     imagePreviewContainer.innerHTML += `<img src="${currentImageUrl}" alt="Imagem atual" style="max-width: 100px; border-radius: 6px; margin: 5px;">`;
                 });
@@ -86,16 +85,22 @@ async function initProductForm() {
 
     // --- Lógica de Pré-visualização de Novas Imagens ---
     imageInput.addEventListener('change', () => {
-        imagePreviewContainer.innerHTML = '<p>Novas Imagens:</p>';
-        for (const file of imageInput.files) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style = "max-width: 100px; border-radius: 6px; margin: 5px;";
-                imagePreviewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
+        // Se estiver editando, mostra a pré-visualização abaixo das imagens atuais
+        if (!isEditMode) {
+            imagePreviewContainer.innerHTML = '';
+        }
+        imagePreviewContainer.innerHTML += '<p>Pré-visualização das novas imagens:</p>';
+        if (imageInput.files) {
+            Array.from(imageInput.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style = "max-width: 100px; border-radius: 6px; margin: 5px;";
+                    imagePreviewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
         }
     });
 
@@ -111,12 +116,14 @@ async function initProductForm() {
         formData.append('categoria_id', categoryInput.value);
         formData.append('sku', skuInput.value);
 
-        for (const file of imageInput.files) {
-            formData.append('imagens', file);
+        // Adiciona todas as novas imagens selecionadas
+        if (imageInput.files.length > 0) {
+            for (const file of imageInput.files) {
+                formData.append('imagens', file);
+            }
         }
 
         const method = isEditMode ? 'PUT' : 'POST';
-        // CORRIGIDO: Usando API_BASE_URL
         const url = isEditMode 
             ? `${API_BASE_URL}/api/produtos/${productId}` 
             : `${API_BASE_URL}/api/produtos`;
@@ -144,7 +151,7 @@ async function initProductForm() {
     });
 }
 
-// Roda a inicialização da página
+// Roda a inicialização da página apenas se o usuário for um admin
 if (checkAdminAuth()) {
     initProductForm();
 }
