@@ -1,28 +1,44 @@
+// frontend/src/js/modules/checkout.js
 import { API_BASE_URL } from '../apiConfig.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    const checkoutForm = document.getElementById('checkout-form');
+document.addEventListener('DOMContentLoaded', async () => {
+    // --- Seleção de Elementos ---
+    const savedAddressesContainer = document.getElementById('saved-addresses-container');
+    const addNewAddressBtn = document.getElementById('add-new-address-btn');
+    const newAddressFormContainer = document.getElementById('new-address-form-container');
+    const submitOrderBtn = document.getElementById('submit-order-btn');
     const summaryItemsContainer = document.getElementById('checkout-summary-items');
     const totalValueElement = document.getElementById('checkout-total-value');
-    const submitButton = document.getElementById('whatsapp-button');
-
+    
+    // --- Pega dados do localStorage ---
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const token = localStorage.getItem('authToken');
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
+    // --- Variáveis de estado ---
+    let selectedAddressId = null;
+
+    // --- Validação Inicial ---
+    if (!token || !userInfo) {
+        alert('Você precisa estar logado para finalizar a compra.');
+        window.location.href = '../auth/login.html';
+        return;
+    }
     if (cart.length === 0) {
-        alert('Seu carrinho está vazio.');
         window.location.href = 'carrinho_compras.html';
         return;
     }
 
+    // --- Funções Auxiliares ---
+
+    // Renderiza o resumo do pedido
     function renderSummary() {
         summaryItemsContainer.innerHTML = '';
         let total = 0;
         cart.forEach(item => {
             const itemTotal = item.price * item.quantity;
             total += itemTotal;
-            
             const imageUrl = `${API_BASE_URL}/${item.image}`;
-
             const itemHTML = `
                 <div class="summary-item">
                     <img src="${imageUrl}" alt="${item.name}">
@@ -36,31 +52,82 @@ document.addEventListener('DOMContentLoaded', () => {
         totalValueElement.textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    checkoutForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        submitButton.textContent = 'Processando...';
-        submitButton.disabled = true;
+    // Carrega e exibe os endereços salvos
+    async function loadAddresses() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/enderecos/usuario/${userInfo.id}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const addresses = await response.json();
 
-        const token = localStorage.getItem('authToken');
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            savedAddressesContainer.innerHTML = '';
 
-        const addressData = {
-            rua: document.getElementById('checkout-street').value,
-            numero: document.getElementById('checkout-number').value,
-            complemento: document.getElementById('checkout-complement').value,
-            bairro: document.getElementById('checkout-neighborhood').value,
-            cidade: document.getElementById('checkout-city').value,
-            estado: document.getElementById('checkout-state').value,
-            cep: document.getElementById('checkout-cep').value,
-        };
+            if (addresses.length > 0) {
+                addresses.forEach((address, index) => {
+                    const addressElement = document.createElement('div');
+                    addressElement.className = 'address-option';
+                    addressElement.innerHTML = `
+                        <input type="radio" name="address" id="address-${address.id}" value="${address.id}">
+                        <label for="address-${address.id}">
+                            <strong>${address.titulo || `Endereço ${index + 1}`}</strong>
+                            <p>${address.rua}, ${address.numero} - ${address.bairro}</p>
+                            <p>${address.cidade}, ${address.estado} - CEP: ${address.cep}</p>
+                        </label>
+                    `;
+                    savedAddressesContainer.appendChild(addressElement);
+                });
+
+                document.querySelectorAll('input[name="address"]').forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        selectedAddressId = e.target.value;
+                        newAddressFormContainer.classList.add('hidden');
+                    });
+                });
+
+            } else {
+                newAddressFormContainer.classList.remove('hidden');
+                addNewAddressBtn.style.display = 'none';
+            }
+
+        } catch (error) {
+            console.error("Erro ao carregar endereços:", error);
+            savedAddressesContainer.innerHTML = '<p>Não foi possível carregar seus endereços.</p>';
+        }
+    }
+    
+    // --- Lógica de Envio do Pedido ---
+    async function submitOrder() {
+        submitOrderBtn.textContent = 'Processando...';
+        submitOrderBtn.disabled = true;
 
         const orderPayload = {
             usuario_id: userInfo.id,
             valor_total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
             status: 'aguardando_pagamento',
             itens: cart,
-            endereco_entrega: addressData
         };
+        
+        if (selectedAddressId) {
+            orderPayload.endereco_entrega_id = selectedAddressId;
+        } else {
+            const newAddressData = {
+                rua: document.getElementById('checkout-street').value,
+                numero: document.getElementById('checkout-number').value,
+                complemento: document.getElementById('checkout-complement').value,
+                bairro: document.getElementById('checkout-neighborhood').value,
+                cidade: document.getElementById('checkout-city').value,
+                estado: document.getElementById('checkout-state').value,
+                cep: document.getElementById('checkout-cep').value,
+            };
+            // Validação simples
+            if(!newAddressData.rua || !newAddressData.numero || !newAddressData.bairro || !newAddressData.cidade || !newAddressData.estado || !newAddressData.cep){
+                alert('Por favor, preencha todos os campos do novo endereço.');
+                submitOrderBtn.textContent = 'Finalizar Pedido no WhatsApp';
+                submitOrderBtn.disabled = false;
+                return;
+            }
+            orderPayload.endereco_novo = newAddressData;
+        }
 
         try {
             const response = await fetch(`${API_BASE_URL}/api/pedidos`, {
@@ -68,22 +135,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(orderPayload)
             });
-
             const createdOrder = await response.json();
-
-            if (!response.ok) {
-                throw new Error(createdOrder.message || 'Não foi possível registrar seu pedido.');
-            }
-
+            if (!response.ok) throw new Error(createdOrder.message || 'Erro ao criar o pedido.');
+            
             const customerName = document.getElementById('checkout-name').value;
-            let message = `Olá! Acabei de finalizar o pedido *#${createdOrder.id}* pelo site.\n\n*Cliente:* ${customerName}\n\n*Itens do Pedido:*\n`;
-            cart.forEach(item => { message += `- ${item.name} (x${item.quantity})\n`; });
-            message += `\n*Total:* ${orderPayload.valor_total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n\n`;
-            message += `*Endereço de Entrega:*\n`;
-            message += `${addressData.rua}, ${addressData.numero} - ${addressData.bairro}\n`;
-            message += `${addressData.cidade}, ${addressData.estado} - CEP: ${addressData.cep}\n\n`;
-            message += `Aguardo as instruções para o pagamento. Obrigado!`;
+            const customerPhone = document.getElementById('checkout-phone').value;
+            let total = orderPayload.valor_total;
 
+            let message = `Olá! Gostaria de finalizar meu pedido *#${createdOrder.id}* pelo site.\n\n*Cliente:* ${customerName}\n*Contato:* ${customerPhone}\n\n*Itens:*\n`;
+            cart.forEach(item => { message += `- ${item.name} (x${item.quantity})\n`; });
+            message += `\n*Total:* ${total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n\n`;
+            
+            if(selectedAddressId) {
+                message += `*Entregar no endereço cadastrado.*\n\n`;
+            } else {
+                message += `*Endereço de Entrega:*\n${orderPayload.endereco_novo.rua}, ${orderPayload.endereco_novo.numero}\n${orderPayload.endereco_novo.cidade}, ${orderPayload.endereco_novo.estado} - CEP: ${orderPayload.endereco_novo.cep}\n\n`;
+            }
+            message += `Aguardo as instruções para o pagamento. Obrigado!`;
+            
             const whatsappNumber = '5594992078960'; // SEU NÚMERO
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
@@ -91,12 +160,24 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = whatsappURL;
 
         } catch (error) {
-            console.error('Erro ao finalizar pedido:', error);
             alert(`Erro: ${error.message}`);
-            submitButton.textContent = 'Finalizar Pedido no WhatsApp';
-            submitButton.disabled = false;
+            submitOrderBtn.textContent = 'Finalizar Pedido no WhatsApp';
+            submitOrderBtn.disabled = false;
         }
+    }
+
+    // --- Adiciona os Event Listeners ---
+    addNewAddressBtn.addEventListener('click', () => {
+        newAddressFormContainer.classList.toggle('hidden');
+        selectedAddressId = null;
+        document.querySelectorAll('input[name="address"]').forEach(radio => radio.checked = false);
     });
 
+    submitOrderBtn.addEventListener('click', submitOrder);
+
+    // --- Inicialização ---
     renderSummary();
+    await loadAddresses();
+    
+    document.getElementById('checkout-name').value = userInfo.nome_usuario || '';
 });

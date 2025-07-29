@@ -58,66 +58,75 @@
         </div>
     </header>
 
+
     <main class="container checkout-page-container">
         <h1>Finalizar Compra</h1>
 
         <div class="checkout-layout">
+            <!-- Coluna da Esquerda: Formulários e Seleção -->
             <section class="checkout-forms">
-                <form id="checkout-form">
-                    <fieldset>
-                        <legend>1. Informações de Contato</legend>
-                        <div class="form-group">
-                            <label for="checkout-name">Nome completo</label>
-                            <input type="text" id="checkout-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="checkout-email">E-mail</label>
-                            <input type="email" id="checkout-email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="checkout-phone">Celular (WhatsApp)</label>
-                            <input type="tel" id="checkout-phone" placeholder="(XX) XXXXX-XXXX" required>
-                        </div>
-                    </fieldset>
+                <!-- SEÇÃO 1: INFORMAÇÕES DE CONTATO -->
+                <fieldset>
+                    <legend>1. Informações de Contato</legend>
+                    <div class="form-group">
+                        <label for="checkout-name">Nome completo</label>
+                        <input type="text" id="checkout-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-phone">Celular (WhatsApp)</label>
+                        <input type="tel" id="checkout-phone" placeholder="(XX) XXXXX-XXXX" required>
+                    </div>
+                </fieldset>
 
-                    <fieldset>
-                        <legend>2. Endereço de Entrega</legend>
+                <!-- SEÇÃO 2: ENDEREÇO DE ENTREGA -->
+                <fieldset>
+                    <legend>2. Endereço de Entrega</legend>
+                    <!-- Container para os endereços salvos -->
+                    <div id="saved-addresses-container">
+                        <p>Carregando seus endereços...</p>
+                    </div>
+
+                    <!-- Botão para mostrar o formulário de novo endereço -->
+                    <button type="button" class="btn btn-secondary" id="add-new-address-btn"
+                        style="margin-top: 15px;">Adicionar Novo Endereço</button>
+
+                    <!-- Formulário de novo endereço (escondido por padrão) -->
+                    <div id="new-address-form-container" class="hidden">
+                        <h4 style="margin-top: 20px;">Preencha seu novo endereço:</h4>
                         <div class="address-grid">
                             <div class="form-group span-2"><label for="checkout-cep">CEP</label><input type="text"
-                                    id="checkout-cep" required></div>
+                                    id="checkout-cep"></div>
                             <div class="form-group span-full"><label for="checkout-street">Rua / Avenida</label><input
-                                    type="text" id="checkout-street" required></div>
+                                    type="text" id="checkout-street"></div>
                             <div class="form-group"><label for="checkout-number">Número</label><input type="text"
-                                    id="checkout-number" required></div>
+                                    id="checkout-number"></div>
                             <div class="form-group"><label for="checkout-complement">Complemento</label><input
-                                    type="text" id="checkout-complement" placeholder="Apto, bloco, etc."></div>
+                                    type="text" id="checkout-complement"></div>
                             <div class="form-group span-full"><label for="checkout-neighborhood">Bairro</label><input
-                                    type="text" id="checkout-neighborhood" required></div>
+                                    type="text" id="checkout-neighborhood"></div>
                             <div class="form-group"><label for="checkout-city">Cidade</label><input type="text"
-                                    id="checkout-city" required></div>
+                                    id="checkout-city"></div>
                             <div class="form-group"><label for="checkout-state">Estado</label><input type="text"
-                                    id="checkout-state" required></div>
+                                    id="checkout-state"></div>
                         </div>
-                    </fieldset>
-
-                    <button type="submit" class="btn btn-primary full-width" id="whatsapp-button">Finalizar Pedido no
-                        WhatsApp</button>
-                </form>
+                    </div>
+                </fieldset>
             </section>
 
+            <!-- Coluna da Direita: Resumo do Pedido -->
             <aside class="checkout-summary">
                 <h3>Seu Pedido</h3>
-                <div id="checkout-summary-items">
-                    <p>Carregando itens do carrinho...</p>
-                </div>
+                <div id="checkout-summary-items"></div>
                 <div class="summary-total">
                     <span>Total</span>
                     <span id="checkout-total-value">R$ 0,00</span>
                 </div>
+                <!-- O botão de finalizar agora fica fora do <form> -->
+                <button class="btn btn-primary full-width" id="submit-order-btn">Finalizar Pedido no WhatsApp</button>
             </aside>
         </div>
     </main>
-
+    
     <footer class="main-footer">
         <div class="container">
             <div class="footer-grid">
