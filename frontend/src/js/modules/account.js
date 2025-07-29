@@ -1,10 +1,6 @@
 import { fetchWithAuth } from '../apiService.js';
 
-/**
- * Verifica se o usuário está autenticado olhando as informações no localStorage.
- * Se não estiver, redireciona para a página de login.
- * @returns {boolean} - Retorna true se autenticado, false caso contrário.
- */
+
 function checkAuth() {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     if (!userInfo) {
@@ -14,10 +10,7 @@ function checkAuth() {
     return true;
 }
 
-/**
- * Executa o logout do usuário.
- * Chama a API para limpar o cookie do backend e depois limpa os dados do frontend.
- */
+
 async function logout() {
     try {
         // Chama o endpoint de logout no backend para limpar o cookie HttpOnly
