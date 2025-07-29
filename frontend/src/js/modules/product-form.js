@@ -9,7 +9,7 @@ function checkAdminAuth() {
     if (!token || userInfo?.tipo_cadastro !== 'admin') {
         alert('Acesso negado. Você precisa ser um administrador.');
         // O caminho correto para voltar para o login a partir da pasta /admin/
-        window.location.href = '../auth/login.html'; 
+        window.location.href = '../auth/login.html';
         return false;
     }
     return true;
@@ -40,7 +40,7 @@ async function initProductForm() {
             const response = await fetch(`${API_BASE_URL}/api/categoria`);
             if (!response.ok) throw new Error('Falha ao carregar categorias');
             const categories = await response.json();
-            
+
             categories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category.id;
@@ -56,58 +56,51 @@ async function initProductForm() {
     await loadCategories();
 
     // --- Preencher Formulário (se estiver em modo de edição) ---
-    if (isEditMode) {
-        formTitle.textContent = 'Editar Produto';
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/produtos/${productId}`);
-            if (!response.ok) throw new Error('Produto não encontrado');
-            const product = await response.json();
-            
-            nameInput.value = product.nome;
-            descriptionInput.value = product.descricao;
-            priceInput.value = product.preco;
-            stockInput.value = product.quantidade_estoque;
-            skuInput.value = product.sku || '';
-            categoryInput.value = product.categoria_id;
-
-            if (product.imagens && product.imagens.length > 0) {
-                imagePreviewContainer.innerHTML = `<p>Imagens Atuais:</p>`;
-                product.imagens.forEach(img => {
-                    const currentImageUrl = `${API_BASE_URL}/${img.url}`;
-                    imagePreviewContainer.innerHTML += `<img src="${currentImageUrl}" alt="Imagem atual" style="max-width: 100px; border-radius: 6px; margin: 5px;">`;
-                });
-            }
-        } catch (error) {
-            console.error('Erro ao buscar dados do produto para edição:', error);
-            alert('Não foi possível carregar os dados do produto.');
-        }
+    if (isEditMode && product.imagens?.length) {
+        const atualContainer = document.createElement('div');
+        atualContainer.innerHTML = '<p>Imagens Atuais:</p>';
+        product.imagens.forEach(img => {
+            const imgEl = document.createElement('img');
+            imgEl.src = `${API_BASE_URL}/${img.url}`;
+            imgEl.style.cssText = 'max-width: 100px; border-radius: 6px; margin: 5px;';
+            atualContainer.appendChild(imgEl);
+        });
+        imagePreviewContainer.appendChild(atualContainer);
     }
+
+
 
     // --- Lógica de Pré-visualização de Novas Imagens ---
     imageInput.addEventListener('change', () => {
-        // Se estiver editando, mostra a pré-visualização abaixo das imagens atuais
-        if (!isEditMode) {
-            imagePreviewContainer.innerHTML = '';
-        }
-        imagePreviewContainer.innerHTML += '<p>Pré-visualização das novas imagens:</p>';
-        if (imageInput.files) {
-            Array.from(imageInput.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style = "max-width: 100px; border-radius: 6px; margin: 5px;";
-                    imagePreviewContainer.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
-        }
+        // Sempre limpa tudo (preview de antigas e texto)
+        imagePreviewContainer.innerHTML = '';
+
+        // Cabeçalho fixo
+        const header = document.createElement('p');
+        header.textContent = isEditMode
+            ? 'Pré-visualização das novas imagens (serão adicionadas às atuais):'
+            : 'Pré-visualização das novas imagens:';
+        header.style.cssText = 'font-size: 12px; color: #666; margin-top: 0; margin-bottom: 10px;';
+        imagePreviewContainer.appendChild(header);
+
+        // Preview dos arquivos selecionados
+        Array.from(imageInput.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.cssText = 'max-width: 100px; border-radius: 6px; margin: 5px;';
+                imagePreviewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
     });
+
 
     // --- Lógica de Envio do Formulário ---
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        
+
         const formData = new FormData();
         formData.append('nome', nameInput.value);
         formData.append('descricao', descriptionInput.value);
@@ -119,15 +112,15 @@ async function initProductForm() {
         // Adiciona todas as novas imagens selecionadas
         if (imageInput.files.length > 0) {
             for (const file of imageInput.files) {
-                formData.append('imagens', file);
+                formData.append('imagens[]', file);
             }
         }
 
         const method = isEditMode ? 'PUT' : 'POST';
-        const url = isEditMode 
-            ? `${API_BASE_URL}/api/produtos/${productId}` 
+        const url = isEditMode
+            ? `${API_BASE_URL}/api/produtos/${productId}`
             : `${API_BASE_URL}/api/produtos`;
-        
+
         try {
             const token = localStorage.getItem('authToken');
             const response = await fetch(url, {
