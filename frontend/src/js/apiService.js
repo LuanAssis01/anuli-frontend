@@ -1,51 +1,45 @@
-// src/js/apiService.js
+// src/js/modules/global.js
 
-import { API_BASE_URL } from './apiConfig.js';
-import { authManager } from './modules/authManager.js';
+import { authManager } from './authManager.js';
+import { fetchWithAuth } from '../apiService.js';
+import { LOGIN_PAGE_URL } from '../apiConfig.js'; // 1. Importa a nova constante
 
 /**
- * Uma função fetch aprimorada que lida com autenticação (cookies)
- * e diferentes tipos de corpo de requisição (JSON e FormData).
- * @param {string} endpoint - O endpoint da API (ex: '/users/login').
- * @param {object} options - As opções da requisição fetch (method, body, etc.).
- * @returns {Promise<any>} - Os dados da resposta em JSON.
+ * Atualiza os links no cabeçalho com base no estado de login do usuário.
  */
-export async function fetchWithAuth(endpoint, options = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
+function updateHeader() {
+  const userActionsLoggedOut = document.getElementById('user-actions-logged-out');
+  const userActionsLoggedIn = document.getElementById('user-actions-logged-in');
+  const logoutButton = document.getElementById('logout-button');
 
-  const defaultOptions = {
-    headers: {
-      ...options.headers,
-    },
-    credentials: 'include', // Envia os cookies automaticamente
-    ...options,
-  };
+  if (!userActionsLoggedOut || !userActionsLoggedIn) return;
 
-  // ⭐ LÓGICA INTELIGENTE DE HEADER ⭐
-  // Se o corpo for FormData, o navegador define o Content-Type sozinho.
-  // Se for um objeto, nós o transformamos em JSON e definimos o header.
-  if (options.body && !(options.body instanceof FormData)) {
-    defaultOptions.headers['Content-Type'] = 'application/json';
-    defaultOptions.body = JSON.stringify(options.body);
+  if (authManager.isLoggedIn()) {
+    userActionsLoggedOut.style.display = 'none';
+    userActionsLoggedIn.style.display = 'flex';
+    if (logoutButton) {
+      logoutButton.addEventListener('click', handleLogout);
+    }
+  } else {
+    userActionsLoggedOut.style.display = 'flex';
+    userActionsLoggedIn.style.display = 'none';
   }
-
-  const response = await fetch(url, defaultOptions);
-
-  if (response.status === 401) {
-    authManager.logout(); // Limpa a sessão do frontend
-    window.location.href = '/frontend/src/html/auth/login.html';
-    throw new Error('Sessão expirada. Por favor, faça login novamente.');
-  }
-
-  if (response.status === 204) {
-    return { success: true };
-  }
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || `Erro na requisição para ${endpoint}`);
-  }
-
-  return data;
 }
+
+/**
+ * Lida com o processo de logout do usuário.
+ */
+async function handleLogout(event) {
+  event.preventDefault();
+  try {
+    await fetchWithAuth('/api/users/logout', { method: 'POST' });
+  } catch (error) {
+    console.error('Erro ao fazer logout no backend:', error);
+  } finally {
+    authManager.logout();
+    // 2. Usa a constante para o redirecionamento
+    window.location.href = LOGIN_PAGE_URL;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', updateHeader);
