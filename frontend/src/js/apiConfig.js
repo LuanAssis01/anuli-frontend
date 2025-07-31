@@ -10,7 +10,7 @@ export const API_BASE_URL = isDevelopment
 
 // ⭐ NOVO: Constantes para as rotas do frontend ⭐
 // Removemos o '/frontend' do início do caminho.
-export const LOGIN_PAGE_URL = '/src/html/auth/login.html';
+export const LOGIN_PAGE_URL = '/frontend/src/html/auth/login.html';
 
 console.log(`API rodando em modo: ${isDevelopment ? 'Desenvolvimento' : 'Produção'}`);
 console.log(`URL da API: ${API_BASE_URL}`);
