@@ -45,7 +45,7 @@ async function handleLogout(event) {
     authManager.logout();
     // ⭐ CAMINHO CORRIGIDO POR VOCÊ ⭐
     // Redireciona para o caminho correto da página de login
-    window.location.href = '/frontend/src/html/auth/login.html';
+    window.location.href = '/src/html/auth/login.html';
   }
 }
 

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- Validação Inicial ---
     if (!authManager.isLoggedIn()) {
         alert('Você precisa estar logado para finalizar a compra.');
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = '/src/html/auth/login.html';
         return;
     }
 

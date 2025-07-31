@@ -11,7 +11,7 @@ import { fetchWithAuth } from '../apiService.js';
 function checkAuthAndRedirect() {
     if (!authManager.isLoggedIn()) {
         // Caminho absoluto para a página de login para evitar erros de navegação
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = '/src/html/auth/login.html';
         return false;
     }
     return true;
@@ -31,7 +31,7 @@ async function handleLogout() {
         // 2. Limpa os dados do usuário do sessionStorage
         authManager.logout();
         // 3. Redireciona para a página de login
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = '/src/html/auth/login.html';
     }
 }
 
