@@ -1,27 +1,31 @@
-// frontend/src/js/modules/profile.js
-import { API_BASE_URL } from '../apiConfig.js';
+// src/js/modules/profile.js
+
+import { fetchWithAuth } from '../apiService.js';
+import { authManager } from './authManager.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Seleciona os elementos do formulário
     const accountForm = document.getElementById('account-form');
+    if (!accountForm) return; // Se o formulário não estiver na página, para a execução
+
     const nameInput = document.getElementById('name');
     const emailInput = document.getElementById('email');
     const formMessage = document.getElementById('form-message');
 
-    // Pega os dados do usuário do localStorage
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    const token = localStorage.getItem('authToken');
+    // 1. Pega os dados do usuário do nosso authManager seguro
+    const user = authManager.getUser();
 
-    // Se não houver dados, não faz nada (o account.js já vai redirecionar)
-    if (!userInfo) return;
+    // Se não houver dados de usuário, não faz nada (a página da conta já deve ter redirecionado)
+    if (!user) return;
 
-    // 1. Preenche o formulário com os dados atuais do usuário
-    nameInput.value = userInfo.nome_usuario;
-    emailInput.value = userInfo.email_usuario;
+    // 2. Preenche o formulário com os dados atuais do usuário
+    nameInput.value = user.nome_usuario;
+    emailInput.value = user.email_usuario;
 
-    // 2. Escuta o evento de submit do formulário
+    // 3. Escuta o evento de submit do formulário
     accountForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        formMessage.textContent = ''; // Limpa mensagens antigas
+        if (formMessage) formMessage.textContent = ''; // Limpa mensagens antigas
 
         // Coleta os dados do formulário
         const updatedData = {
@@ -34,41 +38,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const newPassword = document.getElementById('new-password').value;
         const confirmPassword = document.getElementById('confirm-password').value;
 
+        // Só adiciona os campos de senha ao payload se uma nova senha for digitada
         if (newPassword) {
             if (newPassword !== confirmPassword) {
                 formMessage.textContent = 'A nova senha e a confirmação não coincidem.';
                 formMessage.className = 'error-text';
                 return;
             }
-            // Adiciona senhas ao payload se forem preenchidas
             updatedData.senha_atual = currentPassword;
             updatedData.nova_senha = newPassword;
         }
 
         try {
-            // 3. Envia a requisição para a API
-            const response = await fetch(`${API_BASE_URL}/api/users/${userInfo.id}`, {
+            // 4. Envia a requisição para a API usando nossa função segura
+            // O ID do usuário é pego do authManager e a rota do backend já sabe como lidar com isso.
+            const result = await fetchWithAuth(`/api/users/${user.id}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
                 body: JSON.stringify(updatedData)
             });
 
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.message || 'Erro ao atualizar dados.');
-            }
-
-            // 4. Sucesso!
+            // 5. Sucesso!
             formMessage.textContent = 'Dados atualizados com sucesso!';
             formMessage.className = 'success-text';
 
-            // Atualiza os dados no localStorage para refletir a mudança
-            const updatedUserInfo = { ...userInfo, ...result };
-            localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+            // Limpa os campos de senha após o sucesso
+            if (document.getElementById('current-password')) document.getElementById('current-password').value = '';
+            if (document.getElementById('new-password')) document.getElementById('new-password').value = '';
+            if (document.getElementById('confirm-password')) document.getElementById('confirm-password').value = '';
+
+            // 6. Atualiza os dados do usuário no sessionStorage para refletir a mudança
+            authManager.login(result);
 
         } catch (error) {
             console.error('Erro ao atualizar perfil:', error);

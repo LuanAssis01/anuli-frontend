@@ -1,23 +1,26 @@
-// frontend/src/js/modules/product-form.js
+// src/js/modules/product-form.js
+
+import { fetchWithAuth } from '../apiService.js';
+import { authManager } from './authManager.js';
 import { API_BASE_URL } from '../apiConfig.js';
 
-// Função de segurança para verificar se o usuário é admin
+/**
+ * Função de segurança que verifica se o usuário está logado e é um administrador.
+ */
 function checkAdminAuth() {
-    const token = localStorage.getItem('authToken');
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-
-    if (!token || userInfo?.tipo_cadastro !== 'admin') {
+    if (!authManager.isLoggedIn() || authManager.getUserType() !== 'admin') {
         alert('Acesso negado. Você precisa ser um administrador.');
-        // O caminho correto para voltar para o login a partir da pasta /admin/
-        window.location.href = '../auth/login.html';
+        window.location.href = '/frontend/src/html/auth/login.html';
         return false;
     }
     return true;
 }
 
-// Função principal que inicializa a página do formulário
+/**
+ * Função principal que inicializa a página do formulário de produto.
+ */
 async function initProductForm() {
-    // --- Seleção de Elementos do DOM ---
+    // --- Seleção de Elementos ---
     const form = document.getElementById('product-form');
     const formTitle = document.getElementById('form-title');
     const nameInput = document.getElementById('nome');
@@ -26,21 +29,30 @@ async function initProductForm() {
     const stockInput = document.getElementById('quantidade_estoque');
     const categoryInput = document.getElementById('categoria_id');
     const skuInput = document.getElementById('sku');
-    const imageInput = document.getElementById('imagens'); // ID para múltiplas imagens
+    const imageInput = document.getElementById('imagens');
     const imagePreviewContainer = document.getElementById('image-preview');
 
-    // --- Detecção de Modo (Criar vs. Editar) ---
+    // --- Detecção de Modo ---
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('id');
     const isEditMode = !!productId;
 
-    // --- Função para carregar categorias no select ---
+    /**
+     * Carrega as categorias no select.
+     */
     async function loadCategories() {
+        // ⭐ CORREÇÃO: Adiciona uma verificação para garantir que o elemento existe.
+        if (!categoryInput) {
+            console.error("Elemento <select> com id 'categoria_id' não foi encontrado no HTML.");
+            return;
+        }
+
         try {
             const response = await fetch(`${API_BASE_URL}/api/categoria`);
             if (!response.ok) throw new Error('Falha ao carregar categorias');
             const categories = await response.json();
 
+            categoryInput.innerHTML = '<option value="">Selecione uma categoria</option>';
             categories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category.id;
@@ -49,102 +61,109 @@ async function initProductForm() {
             });
         } catch (error) {
             console.error('Erro ao carregar categorias:', error);
+            categoryInput.innerHTML = '<option value="">Erro ao carregar</option>';
         }
     }
 
-    // Carrega as categorias antes de qualquer outra coisa
+    // Carrega as categorias primeiro
     await loadCategories();
 
-    // --- Preencher Formulário (se estiver em modo de edição) ---
-    if (isEditMode && product.imagens?.length) {
-        const atualContainer = document.createElement('div');
-        atualContainer.innerHTML = '<p>Imagens Atuais:</p>';
-        product.imagens.forEach(img => {
-            const imgEl = document.createElement('img');
-            imgEl.src = `${API_BASE_URL}/${img.url}`;
-            imgEl.style.cssText = 'max-width: 100px; border-radius: 6px; margin: 5px;';
-            atualContainer.appendChild(imgEl);
-        });
-        imagePreviewContainer.appendChild(atualContainer);
+    // --- Preenche o formulário em modo de edição ---
+    if (isEditMode) {
+        if (formTitle) formTitle.textContent = 'Editar Produto';
+        try {
+            const product = await fetchWithAuth(`/api/produtos/${productId}`);
+            if (nameInput) nameInput.value = product.nome;
+            if (descriptionInput) descriptionInput.value = product.descricao;
+            if (priceInput) priceInput.value = product.preco;
+            if (stockInput) stockInput.value = product.quantidade_estoque;
+            if (skuInput) skuInput.value = product.sku;
+            if (categoryInput) categoryInput.value = product.categoria_id;
+
+            // Mostra as imagens atuais
+            if (imagePreviewContainer && product.imagens?.length) {
+                const currentImagesHeader = document.createElement('p');
+                currentImagesHeader.textContent = 'Imagens Atuais:';
+                imagePreviewContainer.appendChild(currentImagesHeader);
+                product.imagens.forEach(img => {
+                    const imgEl = document.createElement('img');
+                    imgEl.src = `${API_BASE_URL}/${img.url}`;
+                    imgEl.style.cssText = 'max-width: 100px; border-radius: 6px; margin: 5px;';
+                    imagePreviewContainer.appendChild(imgEl);
+                });
+            }
+        } catch (error) {
+            alert('Erro ao carregar dados do produto.');
+            console.error(error);
+        }
+    } else {
+        if (formTitle) formTitle.textContent = 'Criar Novo Produto';
     }
 
-
-
     // --- Lógica de Pré-visualização de Novas Imagens ---
-    imageInput.addEventListener('change', () => {
-        // Sempre limpa tudo (preview de antigas e texto)
-        imagePreviewContainer.innerHTML = '';
+    if (imageInput) {
+        imageInput.addEventListener('change', () => {
+            if (!imagePreviewContainer) return;
+            const newPreviews = imagePreviewContainer.querySelectorAll('.new-preview');
+            newPreviews.forEach(el => el.remove());
 
-        // Cabeçalho fixo
-        const header = document.createElement('p');
-        header.textContent = isEditMode
-            ? 'Pré-visualização das novas imagens (serão adicionadas às atuais):'
-            : 'Pré-visualização das novas imagens:';
-        header.style.cssText = 'font-size: 12px; color: #666; margin-top: 0; margin-bottom: 10px;';
-        imagePreviewContainer.appendChild(header);
-
-        // Preview dos arquivos selecionados
-        Array.from(imageInput.files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.cssText = 'max-width: 100px; border-radius: 6px; margin: 5px;';
-                imagePreviewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
+            Array.from(imageInput.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'new-preview';
+                    img.style.cssText = 'max-width: 100px; border-radius: 6px; margin: 5px;';
+                    imagePreviewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
         });
-    });
-
+    }
 
     // --- Lógica de Envio do Formulário ---
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
+    if (form) {
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
 
-        const formData = new FormData();
-        formData.append('nome', nameInput.value);
-        formData.append('descricao', descriptionInput.value);
-        formData.append('preco', priceInput.value);
-        formData.append('quantidade_estoque', stockInput.value);
-        formData.append('categoria_id', categoryInput.value);
-        formData.append('sku', skuInput.value);
+            const formData = new FormData();
+            // Adiciona verificações para garantir que os inputs existem antes de pegar o valor
+            if (nameInput) formData.append('nome', nameInput.value);
+            if (descriptionInput) formData.append('descricao', descriptionInput.value);
+            if (priceInput) formData.append('preco', priceInput.value);
+            if (stockInput) formData.append('quantidade_estoque', stockInput.value);
+            if (categoryInput) formData.append('categoria_id', categoryInput.value);
+            if (skuInput) formData.append('sku', skuInput.value);
 
-        // Adiciona todas as novas imagens selecionadas
-        if (imageInput.files.length > 0) {
-            for (const file of imageInput.files) {
-                formData.append('imagens[]', file);
-            }
-        }
-
-        const method = isEditMode ? 'PUT' : 'POST';
-        const url = isEditMode
-            ? `${API_BASE_URL}/api/produtos/${productId}`
-            : `${API_BASE_URL}/api/produtos`;
-
-        try {
-            const token = localStorage.getItem('authToken');
-            const response = await fetch(url, {
-                method: method,
-                headers: { 'Authorization': `Bearer ${token}` },
-                body: formData
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Erro ao salvar produto.');
+            if (imageInput && imageInput.files.length > 0) {
+                for (const file of imageInput.files) {
+                    formData.append('imagens', file);
+                }
             }
 
-            alert(`Produto ${isEditMode ? 'atualizado' : 'criado'} com sucesso!`);
-            window.location.href = 'produtos.html';
+            const method = isEditMode ? 'PUT' : 'POST';
+            const url = isEditMode ? `/api/produtos/${productId}` : '/api/produtos';
 
-        } catch (error) {
-            console.error('Erro ao enviar formulário:', error);
-            alert(error.message);
-        }
-    });
+            try {
+                await fetchWithAuth(url, {
+                    method: method,
+                    body: formData
+                });
+
+                alert(`Produto ${isEditMode ? 'atualizado' : 'criado'} com sucesso!`);
+                window.location.href = 'produtos.html';
+
+            } catch (error) {
+                console.error('Erro ao enviar formulário:', error);
+                alert(error.message);
+            }
+        });
+    }
 }
 
 // Roda a inicialização da página apenas se o usuário for um admin
-if (checkAdminAuth()) {
-    initProductForm();
-}
+document.addEventListener('DOMContentLoaded', () => {
+    if (checkAdminAuth()) {
+        initProductForm();
+    }
+});

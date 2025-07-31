@@ -199,6 +199,81 @@
 .success-text { color: var(--sucesso); }
 .error-text { color: var(--erro); }
 
+/* src/css/pages/account-dashboard.css */
+
+/* --- ESTILO GERAL PARA OS BOTÕES DE AÇÃO NOS CARDS --- */
+.address-actions {
+    display: flex;
+    gap: 8px; /* Espaçamento entre os botões */
+    margin-top: 16px;
+    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas pequenas */
+}
+
+/* Estilo base para todos os botões de ação */
+.address-actions button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd; /* Borda sutil */
+    background-color: #f9f9f9; /* Fundo quase branco */
+    color: #333; /* Cor do texto escura */
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Transição suave para hover */
+    font-family: 'Inter', sans-serif; /* Garante a mesma fonte do site */
+}
+
+/* Efeito de hover para os botões padrão */
+.address-actions button:hover {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+}
+
+/* --- ESTILOS ESPECÍFICOS --- */
+
+/* Botão de Excluir (destaque de perigo) */
+.address-actions .action-link-delete {
+    background-color: #fff5f5; /* Fundo vermelho bem claro */
+    border-color: #f5c6cb; /* Borda vermelha clara */
+    color: #c53030; /* Texto vermelho escuro */
+}
+
+.address-actions .action-link-delete:hover {
+    background-color: #c53030; /* Fundo vermelho escuro no hover */
+    border-color: #c53030;
+    color: #fff; /* Texto branco no hover */
+}
+
+/* Botão "Definir como Principal" (destaque sutil) */
+.address-actions .action-link-principal {
+    background-color: #f0f9ff; /* Fundo azul bem claro */
+    border-color: #bee3f8; /* Borda azul clara */
+    color: #2c5282; /* Texto azul escuro */
+}
+
+.address-actions .action-link-principal:hover {
+    background-color: #2c5282; /* Fundo azul escuro no hover */
+    border-color: #2c5282;
+    color: #fff; /* Texto branco no hover */
+}
+
+/* --- ESTILO PARA O BOTÃO PRINCIPAL DA PÁGINA (Adicionar Endereço) --- */
+.content-header .btn-primary {
+    background-color: #001f3f; /* Azul marinho escuro, como no seu design */
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.content-header .btn-primary:hover {
+    background-color: #003366; /* Um tom de azul um pouco mais claro */
+}
+
+
 /* --- Responsividade --- */
 @media (max-width: 900px) {
     .account-layout {

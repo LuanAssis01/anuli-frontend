@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Endereços - Anuli Acessórios</title>
+    <title>Detalhes do Pedido - Anuli Acessórios</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../../css/components/header.css">
     <link rel="stylesheet" href="../../css/components/footer.css">
     <link rel="stylesheet" href="../../css/pages/account-dashboard.css">
+    <link rel="stylesheet" href="../../css/pages/order-details.css"> <!-- Novo CSS -->
 </head>
 
 <body>
@@ -63,21 +64,55 @@
             <aside class="account-sidebar">
                 <ul>
                     <li><a href="minha_conta.html">Painel</a></li>
-                    <li><a href="meus_pedidos.html">Meus Pedidos</a></li>
-                    <li><a href="meus_enderecos.html" class="active">Meus Endereços</a></li>
+                    <li><a href="meus_pedidos.html" class="active">Meus Pedidos</a></li>
+                    <li><a href="meus_enderecos.html">Meus Endereços</a></li>
                     <li><a href="dados_pessoais.html">Dados Pessoais</a></li>
                     <li><a href="#" id="logout-btn">Sair</a></li>
                 </ul>
             </aside>
 
-            <section class="account-content">
+            <section class="account-content" id="order-details-content">
+                <!-- ⭐ ESTRUTURA HTML RESTAURADA ⭐ -->
                 <div class="content-header">
-                    <h2>Meus Endereços</h2>
-                    <a href="cadastrar-endereco.html" class="btn btn-primary btn-sm">Adicionar Endereço</a>
+                    <h2 id="order-title">Carregando Pedido...</h2>
                 </div>
 
-                <div class="addresses-grid" id="addresses-grid">
-                    <p>Carregando endereços...</p>
+                <div class="order-details-grid">
+                    <!-- Coluna da Esquerda: Resumo do Pedido -->
+                    <div class="order-summary-card">
+                        <h4>Resumo do Pedido</h4>
+                        <div id="order-summary-items">
+                            <p>Carregando itens...</p>
+                        </div>
+                        <div class="summary-totals">
+                            <div class="total-row">
+                                <span>Subtotal</span>
+                                <span id="summary-subtotal">R$ 0,00</span>
+                            </div>
+                            <div class="total-row">
+                                <span>Frete</span>
+                                <span id="summary-shipping">Grátis</span>
+                            </div>
+                            <div class="total-row grand-total">
+                                <span>Total</span>
+                                <span id="summary-total">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna da Direita: Informações -->
+                    <div class="order-info-cards">
+                        <div class="info-card">
+                            <h4>Status do Pedido</h4>
+                            <p id="order-status">Carregando...</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>Endereço de Entrega</h4>
+                            <address id="shipping-address">
+                                Carregando endereço...
+                            </address>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -130,9 +165,12 @@
     </footer>
 
     <script src="../../js/main.js" defer></script>
+    <script src="../../js/apiConfig.js" type="module"></script>
+    <script src="../../js/apiService.js" type="module"></script>
+    <script src="../../js/modules/authManager.js" type="module"></script>
     <script src="../../js/modules/account.js" type="module"></script>
-    <script src="../../js/modules/global.js" type="module"></script>
-    <script src="../../js/modules/address.js" type="module"></script> <!-- CORRIGIDO -->
+    <!-- O script 'address.js' foi removido, pois não pertence a esta página -->
+    <script src="../../js/modules/order-detail.js" type="module"></script>
 </body>
 
 </html>

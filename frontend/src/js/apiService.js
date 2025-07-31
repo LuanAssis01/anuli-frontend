@@ -1,37 +1,51 @@
+// src/js/apiService.js
+
 import { API_BASE_URL } from './apiConfig.js';
+import { authManager } from './modules/authManager.js';
 
 /**
- * Faz uma requisição para a API, enviando os cookies de autenticação automaticamente.
- * @param {string} endpoint - O endpoint da API (ex: '/api/users/login').
- * @param {object} options - As opções do fetch (method, body, etc.).
- * @returns {Promise<any>} - A resposta da API em formato JSON.
+ * Uma função fetch aprimorada que lida com autenticação (cookies)
+ * e diferentes tipos de corpo de requisição (JSON e FormData).
+ * @param {string} endpoint - O endpoint da API (ex: '/users/login').
+ * @param {object} options - As opções da requisição fetch (method, body, etc.).
+ * @returns {Promise<any>} - Os dados da resposta em JSON.
  */
 export async function fetchWithAuth(endpoint, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;
+  const url = `${API_BASE_URL}${endpoint}`;
 
-    // Adiciona as configurações essenciais para a comunicação com cookies
-    const defaultOptions = {
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers,
-        },
-        // ESSENCIAL: Envia os cookies HttpOnly com a requisição
-        credentials: 'include', 
-        ...options,
-    };
+  const defaultOptions = {
+    headers: {
+      ...options.headers,
+    },
+    credentials: 'include', // Envia os cookies automaticamente
+    ...options,
+  };
 
-    const response = await fetch(url, defaultOptions);
-    
-    // Se a resposta for 204 (No Content), como no logout, retorna sucesso
-    if (response.status === 204) {
-        return { success: true };
-    }
+  // ⭐ LÓGICA INTELIGENTE DE HEADER ⭐
+  // Se o corpo for FormData, o navegador define o Content-Type sozinho.
+  // Se for um objeto, nós o transformamos em JSON e definimos o header.
+  if (options.body && !(options.body instanceof FormData)) {
+    defaultOptions.headers['Content-Type'] = 'application/json';
+    defaultOptions.body = JSON.stringify(options.body);
+  }
 
-    const data = await response.json();
+  const response = await fetch(url, defaultOptions);
 
-    if (!response.ok) {
-        throw new Error(data.message || `Erro na requisição para ${endpoint}`);
-    }
+  if (response.status === 401) {
+    authManager.logout(); // Limpa a sessão do frontend
+    window.location.href = '/frontend/src/html/auth/login.html';
+    throw new Error('Sessão expirada. Por favor, faça login novamente.');
+  }
 
-    return data;
+  if (response.status === 204) {
+    return { success: true };
+  }
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || `Erro na requisição para ${endpoint}`);
+  }
+
+  return data;
 }

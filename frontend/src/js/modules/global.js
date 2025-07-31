@@ -1,36 +1,53 @@
-// frontend/src/js/global.js
+// src/js/modules/global.js
 
-function updateHeaderBasedOnLogin() {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    const accountLink = document.getElementById('account-link');
+import { authManager } from './authManager.js';
+import { fetchWithAuth } from '../apiService.js';
 
-    if (accountLink) {
-        if (userInfo) {
-            // Se o usuário está logado, o link leva para "Minha Conta"
-            // Usamos um caminho absoluto a partir da raiz do site
-            accountLink.href = '/src/html/conta/minha_conta.html';
-        } else {
-            // Se não está logado, o link leva para "Login"
-            accountLink.href = '/src/html/auth/login.html';
-        }
+/**
+ * Atualiza os links no cabeçalho com base no estado de login do usuário.
+ */
+function updateHeader() {
+  const userActionsLoggedOut = document.getElementById('user-actions-logged-out');
+  const userActionsLoggedIn = document.getElementById('user-actions-logged-in');
+  const logoutButton = document.getElementById('logout-button');
+
+  // Se os elementos não existirem na página, não faz nada.
+  if (!userActionsLoggedOut || !userActionsLoggedIn) return;
+
+  if (authManager.isLoggedIn()) {
+    // Usuário está logado: mostra as ações de logado e esconde as de deslogado.
+    userActionsLoggedOut.style.display = 'none';
+    userActionsLoggedIn.style.display = 'flex'; // ou 'block', dependendo do seu CSS
+
+    // Adiciona o evento de clique ao botão de sair, se ele existir
+    if (logoutButton) {
+      logoutButton.addEventListener('click', handleLogout);
     }
+  } else {
+    // Usuário não está logado: faz o oposto.
+    userActionsLoggedOut.style.display = 'flex';
+    userActionsLoggedIn.style.display = 'none';
+  }
 }
 
-// Lógica da Barra de Busca
-function setupSearch() {
-    const searchForm = document.getElementById('header-search-form');
-    if (searchForm) {
-        searchForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const query = e.target.elements.q.value;
-            if (query.trim()) {
-                window.location.href = `/src/html/resultados-busca.html?q=${encodeURIComponent(query)}`;
-            }
-        });
-    }
+/**
+ * Lida com o processo de logout do usuário.
+ */
+async function handleLogout(event) {
+  event.preventDefault();
+  try {
+    // Chama a API para que o backend limpe o cookie HttpOnly
+    await fetchWithAuth('/api/users/logout', { method: 'POST' });
+  } catch (error) {
+    console.error('Erro ao fazer logout no backend:', error);
+  } finally {
+    // Limpa os dados do usuário do sessionStorage
+    authManager.logout();
+    // ⭐ CAMINHO CORRIGIDO POR VOCÊ ⭐
+    // Redireciona para o caminho correto da página de login
+    window.location.href = '/frontend/src/html/auth/login.html';
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    updateHeaderBasedOnLogin();
-    setupSearch();
-});
+// Executa a função para atualizar o cabeçalho assim que o conteúdo da página for carregado
+document.addEventListener('DOMContentLoaded', updateHeader);
