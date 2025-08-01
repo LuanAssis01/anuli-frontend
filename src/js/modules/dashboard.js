@@ -2,20 +2,27 @@
 
 import { fetchWithAuth } from '../apiService.js';
 import { authManager } from './authManager.js';
+import { LOGIN_PAGE_URL } from '../apiConfig.js';
 
 /**
- * Função de segurança que verifica se o usuário está logado e é um administrador.
- * Redireciona para o login caso não seja.
- * @returns {boolean} - True se o usuário for um admin autenticado.
+ * Função de segurança que verifica se o utilizador está logado e é um administrador.
+ * Agora, ela dá um feedback mais claro no console.
  */
 function checkAdminAuth() {
-    // A verificação agora é baseada no nosso authManager seguro
-    if (!authManager.isLoggedIn() || authManager.getUserType() !== 'admin') {
-        alert('Acesso negado. Você precisa ser um administrador.');
-        window.location.href = '/frontend/src/html/auth/login.html'; 
-        return false;
+    const isLoggedIn = authManager.isLoggedIn();
+    const userType = authManager.getUserType();
+
+    // Debugging: mostra o que o authManager está a ver.
+    console.log('Verificando autenticação do admin...');
+    console.log('Está logado?', isLoggedIn);
+    console.log('Tipo de utilizador?', userType);
+
+    if (!isLoggedIn || userType !== 'admin') {
+        // Usa a constante para o redirecionamento
+        window.location.href = LOGIN_PAGE_URL;
+        // Lança um erro para parar a execução do resto do script.
+        throw new Error('Acesso negado. Apenas para administradores.');
     }
-    return true;
 }
 
 /**
@@ -29,29 +36,21 @@ async function populateDashboard() {
         const lowStockEl = document.getElementById('low-stock-items');
         const totalSalesEl = document.getElementById('total-sales');
 
-        // Usa o fetchWithAuth, que envia os cookies de autenticação automaticamente
-        // Promise.all faz as duas chamadas de API em paralelo, o que é mais rápido
         const [products, orders] = await Promise.all([
             fetchWithAuth('/api/produtos'),
             fetchWithAuth('/api/pedidos')
         ]);
 
-        // 1. Calcula e exibe o Total de Produtos
+        // Calcula e exibe os dados
         if (totalProductsEl) totalProductsEl.textContent = products.length;
-
-        // 2. Calcula e exibe os Pedidos Pendentes
         if (pendingOrdersEl) {
             const pendingOrdersCount = orders.filter(order => order.status && order.status.toLowerCase() === 'processando').length;
             pendingOrdersEl.textContent = pendingOrdersCount;
         }
-
-        // 3. Calcula e exibe os Itens com Baixo Estoque (ex: 5 ou menos)
         if (lowStockEl) {
             const lowStockCount = products.filter(product => product.quantidade_estoque <= 5).length;
             lowStockEl.textContent = lowStockCount;
         }
-        
-        // 4. Calcula e exibe o Total de Vendas (considerando apenas pedidos não cancelados)
         if (totalSalesEl) {
             const totalSales = orders.reduce((sum, order) => {
                 return (order.status && order.status.toLowerCase() !== 'cancelado') ? sum + parseFloat(order.valor_total) : sum;
@@ -65,9 +64,22 @@ async function populateDashboard() {
     }
 }
 
-// Roda tudo quando a página carregar
-document.addEventListener('DOMContentLoaded', () => {
-    if (checkAdminAuth()) {
+/**
+ * Função principal que inicializa a página.
+ */
+function initDashboard() {
+    try {
+        checkAdminAuth();
         populateDashboard();
+    } catch (error) {
+        // Se o checkAdminAuth falhar, o erro será capturado aqui e a página não tentará carregar os dados.
+        console.error(error.message);
+        // Opcional: mostrar uma mensagem na página
+        const contentArea = document.querySelector('.admin-content');
+        if (contentArea) {
+            contentArea.innerHTML = `<h1>Acesso Negado</h1><p>Você será redirecionado para a página de login.</p>`;
+        }
     }
-});
+}
+
+document.addEventListener('DOMContentLoaded', initDashboard);
