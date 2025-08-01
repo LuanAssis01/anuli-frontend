@@ -13,7 +13,3 @@ export const API_BASE_URL = isDevelopment
 export const LOGIN_PAGE_URL = '/src/html/auth/login.html';
 export const ADMIN_DASHBOARD_URL = '/src/html/admin/dashboard.html'; // <-- NOVO
 export const USER_ACCOUNT_URL = '/src/html/conta/minha_conta.html';    // <-- NOVO
-
-// Informa no console em que modo a API está a ser executada
-console.log(`API a ser executada em modo: ${isDevelopment ? 'Desenvolvimento' : 'Produção'}`);
-console.log(`URL da API: ${API_BASE_URL}`);
