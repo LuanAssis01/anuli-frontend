@@ -71,10 +71,10 @@ async function handleAddToCart(event) {
     // Delegação de evento: só continua se o clique foi no botão correto
     if (!event.target.matches('.add-to-cart-btn')) return;
 
-    // 1. Verifica se o usuário está logado usando o authManager
+    // 1. Verifica se o utilizador está logado usando o authManager
     if (!authManager.isLoggedIn()) {
         alert('Você precisa estar logado para adicionar produtos ao carrinho.');
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = 'src/html/auth/login.html';
         return;
     }
 
@@ -85,13 +85,14 @@ async function handleAddToCart(event) {
     button.disabled = true;
 
     try {
-        // 2. Faz a chamada segura para a API para adicionar o item
+        // ⭐ CORREÇÃO AQUI ⭐
+        // Passamos um objeto JavaScript puro. O apiService.js cuidará do JSON.stringify.
         await fetchWithAuth('/api/carrinho/items', {
             method: 'POST',
-            body: JSON.stringify({
+            body: {
                 produto_id: productId,
-                quantidade: 1 // Adiciona uma unidade de cada vez
-            })
+                quantidade: 1
+            }
         });
 
         // Feedback visual de sucesso
