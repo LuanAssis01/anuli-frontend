@@ -1,2 +1,8 @@
 {
+  "rewrites": [
+    {
+      "source": "/:path((?!frontend/).*)",
+      "destination": "/frontend/:path"
+    }
+  ]
 }
