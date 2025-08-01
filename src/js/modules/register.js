@@ -1,16 +1,21 @@
 // src/js/modules/register.js
 
 import { fetchWithAuth } from '../apiService.js';
-import { authManager } from './authManager.js'; // Importa o authManager
+import { authManager } from './authManager.js';
+import { USER_ACCOUNT_URL } from '../apiConfig.js';
 
 const registerForm = document.getElementById('register-form');
 const errorMessage = document.getElementById('error-message');
+const submitButton = registerForm ? registerForm.querySelector('button[type="submit"]') : null;
 
-if (registerForm) {
+if (registerForm && submitButton) {
     registerForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         
-        if (errorMessage) errorMessage.textContent = ''; // Limpa erros antigos
+        if (errorMessage) {
+            errorMessage.textContent = '';
+            errorMessage.className = '';
+        }
 
         // Coleta os dados do formulário
         const nome = document.getElementById('name').value;
@@ -19,37 +24,52 @@ if (registerForm) {
         const senha = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirm-password').value;
 
-        // Validação simples no frontend
+        // Validação no frontend
         if (senha !== confirmPassword) {
-            if (errorMessage) errorMessage.textContent = 'As senhas não coincidem.';
+            if (errorMessage) {
+                errorMessage.textContent = 'As senhas não coincidem.';
+                errorMessage.className = 'error-text';
+            }
             return;
         }
 
+        // Gestão do estado do botão
+        const originalButtonText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Criando conta...';
+
         try {
-            // A rota de criação de usuário é pública. O backend criará o usuário
-            // e retornará os dados junto com o cookie de autenticação.
+            // ⭐ CORREÇÃO AQUI ⭐
+            // Passamos um objeto JavaScript puro. O apiService.js cuidará do JSON.stringify.
             const responseData = await fetchWithAuth('/api/users', {
                 method: 'POST',
-                body: JSON.stringify({
+                body: {
                     nome_usuario: nome,
                     email_usuario: email,
                     senha_usuario: senha,
                     telefone_usuario: telefone,
-                })
+                    tipo_cadastro: 'cliente'
+                }
             });
 
-            // A API retorna um objeto { user: { ... } }
             const user = responseData.user;
 
-            // ⭐ CORREÇÃO: Usa o authManager para salvar a sessão do usuário
+            // Faz o login automático do utilizador após o cadastro
             authManager.login(user);
             
-            // Redireciona para a página da conta, pois o usuário já está logado.
-            window.location.href = '../conta/minha_conta.html';
+            // Redireciona para a página da conta
+            window.location.href = USER_ACCOUNT_URL;
 
         } catch (error) {
-            if (errorMessage) errorMessage.textContent = error.message;
+            if (errorMessage) {
+                errorMessage.textContent = error.message;
+                errorMessage.className = 'error-text';
+            }
             console.error('Erro no cadastro:', error);
+        } finally {
+            // Garante que o botão seja reativado
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
         }
     });
 }
