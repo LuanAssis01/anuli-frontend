@@ -1,8 +1,13 @@
 {
-  "rewrites": [
+  "headers": [
     {
-      "source": "/:path((?!frontend/).*)",
-      "destination": "/frontend/:path"
+      "source": "/src/(.*)\\.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
     }
   ]
 }
