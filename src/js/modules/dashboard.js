@@ -12,10 +12,10 @@ function checkAdminAuth() {
     const isLoggedIn = authManager.isLoggedIn();
     const userType = authManager.getUserType();
 
-    // Debugging: mostra o que o authManager está a ver.
-    console.log('Verificando autenticação do admin...');
-    console.log('Está logado?', isLoggedIn);
-    console.log('Tipo de utilizador?', userType);
+    // // Debugging: mostra o que o authManager está a ver.
+    // console.log('Verificando autenticação do admin...');
+    // console.log('Está logado?', isLoggedIn);
+    // console.log('Tipo de utilizador?', userType);
 
     if (!isLoggedIn || userType !== 'admin') {
         // Usa a constante para o redirecionamento
