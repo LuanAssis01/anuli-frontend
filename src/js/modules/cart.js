@@ -7,20 +7,20 @@ import { API_BASE_URL } from '../apiConfig.js';
 const cartItemsContainer = document.getElementById('cart-items-container');
 const subtotalElement = document.getElementById('subtotal-value');
 const totalElement = document.getElementById('total-value');
-const checkoutButton = document.getElementById('checkout-btn');
+const checkoutButton = document.querySelector('.order-summary a.btn-primary');
 
 /**
  * Função principal que busca os dados do carrinho da API e renderiza a página.
  */
 async function loadCart() {
-    // Verifica se o usuário está logado antes de qualquer coisa
+    // Verifica se o utilizador está logado antes de qualquer coisa
     if (!authManager.isLoggedIn()) {
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = '/src/html/auth/login.html';
         return;
     }
 
     // Mostra uma mensagem de carregamento
-    if (cartItemsContainer) cartItemsContainer.innerHTML = '<p>Carregando seu carrinho...</p>';
+    if (cartItemsContainer) cartItemsContainer.innerHTML = '<p>A carregar o seu carrinho...</p>';
 
     try {
         const cartData = await fetchWithAuth('/api/carrinho');
@@ -30,14 +30,14 @@ async function loadCart() {
         cartItemsContainer.innerHTML = ''; // Limpa a mensagem de carregamento
 
         if (!cartData || cartData.itens.length === 0) {
-            cartItemsContainer.innerHTML = '<p>Seu carrinho de compras está vazio.</p>';
+            cartItemsContainer.innerHTML = '<p>O seu carrinho de compras está vazio.</p>';
             subtotalElement.textContent = 'R$ 0,00';
             totalElement.textContent = 'R$ 0,00';
-            if (checkoutButton) checkoutButton.disabled = true; // Desabilita o botão de checkout
+            if (checkoutButton) checkoutButton.classList.add('disabled'); // Desabilita o botão de checkout
             return;
         }
         
-        if (checkoutButton) checkoutButton.disabled = false; // Habilita o botão de checkout
+        if (checkoutButton) checkoutButton.classList.remove('disabled'); // Habilita o botão de checkout
 
         cartData.itens.forEach(item => {
             const cartItemElement = createCartItemElement(item);
@@ -49,7 +49,7 @@ async function loadCart() {
 
     } catch (error) {
         console.error('Erro ao carregar o carrinho:', error);
-        if (cartItemsContainer) cartItemsContainer.innerHTML = '<p>Não foi possível carregar seu carrinho. Tente recarregar a página.</p>';
+        if (cartItemsContainer) cartItemsContainer.innerHTML = '<p>Não foi possível carregar o seu carrinho. Tente recarregar a página.</p>';
     }
 }
 
@@ -69,7 +69,7 @@ function createCartItemElement(item) {
     itemElement.className = 'cart-item';
     itemElement.innerHTML = `
         <div class="item-product">
-            <img src="${imageUrl}" alt="${produto.name}">
+            <img src="${imageUrl}" alt="${produto.nome}">
             <div class="item-details">
                 <p class="item-title">${produto.nome}</p>
                 <p class="item-price">${parseFloat(item.preco_unitario).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
@@ -115,7 +115,7 @@ async function handleUpdateQuantity(itemId, newQuantity) {
     try {
         await fetchWithAuth(`/api/carrinho/items/${itemId}`, {
             method: 'PUT',
-            body: JSON.stringify({ quantidade: newQuantity })
+            body: { quantidade: newQuantity }
         });
         loadCart(); // Recarrega o carrinho para refletir a mudança
     } catch (error) {

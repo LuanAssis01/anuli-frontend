@@ -47,14 +47,6 @@
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </a>
-                <button class="mobile-nav-toggle" aria-label="Abrir menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
             </div>
         </div>
     </header>
@@ -84,39 +76,65 @@
                     <legend>2. Endereço de Entrega</legend>
                     <!-- Container para os endereços salvos -->
                     <div id="saved-addresses-container">
-                        <p>Carregando seus endereços...</p>
+                        <p>A carregar os seus endereços...</p>
                     </div>
 
-                    <!-- Botão para mostrar o formulário de novo endereço -->
-                    <button type="button" class="btn btn-secondary" id="add-new-address-btn"
-                        style="margin-top: 15px;">Adicionar Novo Endereço</button>
+                    <!-- Botão para mostrar/esconder o formulário de novo endereço -->
+                    <div class="new-address-toggle">
+                        <button type="button" id="add-new-address-btn" class="btn btn-secondary">Adicionar Novo
+                            Endereço</button>
+                    </div>
 
-                    <!-- Formulário de novo endereço (escondido por padrão) -->
-                    <div id="new-address-form-container" class="hidden">
-                        <h4 style="margin-top: 20px;">Preencha seu novo endereço:</h4>
-                        <div class="address-grid">
-                            <div class="form-group span-2"><label for="checkout-cep">CEP</label><input type="text"
-                                    id="checkout-cep"></div>
-                            <div class="form-group span-full"><label for="checkout-street">Rua / Avenida</label><input
-                                    type="text" id="checkout-street"></div>
-                            <div class="form-group"><label for="checkout-number">Número</label><input type="text"
-                                    id="checkout-number"></div>
-                            <div class="form-group"><label for="checkout-complement">Complemento</label><input
-                                    type="text" id="checkout-complement"></div>
-                            <div class="form-group span-full"><label for="checkout-neighborhood">Bairro</label><input
-                                    type="text" id="checkout-neighborhood"></div>
-                            <div class="form-group"><label for="checkout-city">Cidade</label><input type="text"
-                                    id="checkout-city"></div>
-                            <div class="form-group"><label for="checkout-state">Estado</label><input type="text"
-                                    id="checkout-state"></div>
-                        </div>
+                    <!-- Container do formulário de novo endereço (começa escondido) -->
+                    <div id="new-address-form-container" class="hidden" style="margin-top: 20px;">
+                        <h4>Preencha o seu novo endereço:</h4>
+                        <form id="new-address-form" class="checkout-form">
+                            <div class="form-group">
+                                <label for="new-titulo">Título (ex: Casa, Trabalho)</label>
+                                <input type="text" id="new-titulo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-cep">CEP</label>
+                                <input type="text" id="new-cep" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-rua">Rua / Avenida</label>
+                                <input type="text" id="new-rua" required>
+                            </div>
+                            <div class="form-group-inline">
+                                <div class="form-group">
+                                    <label for="new-numero">Número</label>
+                                    <input type="text" id="new-numero" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-complemento">Complemento</label>
+                                    <input type="text" id="new-complemento">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-bairro">Bairro</label>
+                                <input type="text" id="new-bairro" required>
+                            </div>
+                            <div class="form-group-inline">
+                                <div class="form-group">
+                                    <label for="new-cidade">Cidade</label>
+                                    <input type="text" id="new-cidade" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-estado">Estado</label>
+                                    <input type="text" id="new-estado" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Salvar Endereço</button>
+                            <p id="new-address-error" class="error-text"></p>
+                        </form>
                     </div>
                 </fieldset>
             </section>
 
             <!-- Coluna da Direita: Resumo do Pedido -->
             <aside class="checkout-summary">
-                <h3>Seu Pedido</h3>
+                <h3>O seu Pedido</h3>
                 <div id="checkout-summary-items"></div>
                 <div class="summary-total">
                     <span>Total</span>
@@ -146,10 +164,10 @@
                 <div class="footer-column">
                     <h4>Ajuda</h4>
                     <ul class="footer-links">
-                        <li><a href="/frontend/src/html/institucional/ajuda.html#faq">Dúvidas Frequentes</a></li>
-                        <li><a href="/frontend/src/html/institucional/ajuda.html#como-comprar">Como Comprar</a></li>
-                        <li><a href="/frontend/src/html/institucional/ajuda.html#trocas">Política de Trocas</a></li>
-                        <li><a href="/frontend/src/html/institucional/ajuda.html#rastreio">Acompanhe seu Pedido</a></li>
+                        <li><a href="../html/institucional/ajuda.html#faq">Dúvidas Frequentes</a></li>
+                        <li><a href="../html/institucional/ajuda.html#como-comprar">Como Comprar</a></li>
+                        <li><a href="../institucional/ajuda.html#trocas">Política de Trocas</a></li>
+                        <li><a href="../html/institucional/ajuda.html#rastreio">Acompanhe seu Pedido</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -175,6 +193,9 @@
     </footer>
 
     <script src="../../js/main.js" defer></script>
+    <script src="../../js/apiConfig.js" type="module"></script>
+    <script src="../../js/apiService.js" type="module"></script>
+    <script src="../../js/modules/authManager.js" type="module"></script>
     <script src="../../js/modules/global.js" type="module"></script>
     <script src="../../js/modules/checkout.js" type="module"></script>
 </body>

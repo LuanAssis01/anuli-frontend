@@ -85,51 +85,167 @@
         </div>
     </main>
 
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-column">
-                    <img src="../../assets/images/logo_anuli.svg" alt="ANULI" class="footer-logo">
-                </div>
-                <div class="footer-column">
-                    <h4>Institucional</h4>
-                    <ul class="footer-links">
-                        <li><a href="../institucional/sobre_nos.html">Sobre Nós</a></li>
-                        <li><a href="../institucional/contato.html">Fale Conosco</a></li>
-                        <li><a href="../institucional/termos_servico.html">Termos de Serviço</a></li>
-                        <li><a href="../institucional/politica_privacidade.html">Política de Privacidade</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Ajuda</h4>
-                    <ul class="footer-links">
-                        <li><a href="/frontend/src/html/institucional/ajuda.html#faq">Dúvidas Frequentes</a></li>
-                        <li><a href="/frontend/src/html/institucional/ajuda.html#como-comprar">Como Comprar</a></li>
-                        <li><a href="/frontend/src/html/institucional/ajuda.html#trocas">Política de Trocas</a></li>
-                        <li><a href="/frontend/src/html/institucional/ajuda.html#rastreio">Acompanhe seu Pedido</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Siga-nos</h4>
-                    <div class="social-links">
-                        <a href="https://www.instagram.com/anuli.acessorios/" target="_blank" rel="noopener noreferrer"
-                            aria-label="Instagram">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Anuli Acessórios. Todos os direitos reservados.</p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - Anuli Acessórios</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/components/button.css">
+    <link rel="stylesheet" href="../../css/components/header.css">
+    <link rel="stylesheet" href="../../css/components/footer.css">
+    <link rel="stylesheet" href="../../css/pages/checkout-page.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container header-container">
+            <a href="/" class="header-logo-text">ANULI</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/src/html/listagem_produtos.html">Produtos</a></li>
+                    <li><a href="/src/html/institucional/sobre_nos.html">Sobre Nós</a></li>
+                    <li><a href="/src/html/institucional/contato.html">Contato</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="/src/html/compra/carrinho_compras.html" class="action-link" aria-label="Carrinho de Compras">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </a>
+                <a href="/src/html/conta/minha_conta.html" class="action-link" aria-label="Minha Conta"
+                    id="account-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
             </div>
         </div>
+    </header>
+
+
+    <main class="container checkout-page-container">
+        <h1>Finalizar Compra</h1>
+
+        <div class="checkout-layout">
+            <!-- Coluna da Esquerda: Formulários e Seleção -->
+            <section class="checkout-forms">
+                <!-- SEÇÃO 1: INFORMAÇÕES DE CONTATO -->
+                <fieldset>
+                    <legend>1. Informações de Contato</legend>
+                    <div class="form-group">
+                        <label for="checkout-name">Nome completo</label>
+                        <input type="text" id="checkout-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-phone">Celular (WhatsApp)</label>
+                        <input type="tel" id="checkout-phone" placeholder="(XX) XXXXX-XXXX" required>
+                    </div>
+                </fieldset>
+
+                <!-- SEÇÃO 2: ENDEREÇO DE ENTREGA -->
+                <fieldset>
+                    <legend>2. Endereço de Entrega</legend>
+                    <!-- Container para os endereços salvos -->
+                    <div id="saved-addresses-container">
+                        <p>A carregar os seus endereços...</p>
+                    </div>
+
+                    <!-- Botão para mostrar/esconder o formulário de novo endereço -->
+                    <div class="new-address-toggle">
+                        <button type="button" id="add-new-address-btn" class="btn btn-secondary">Adicionar Novo Endereço</button>
+                    </div>
+
+                    <!-- Container do formulário de novo endereço (começa escondido) -->
+                    <div id="new-address-form-container" class="hidden" style="margin-top: 20px;">
+                        <h4>Preencha o seu novo endereço:</h4>
+                        <form id="new-address-form" class="checkout-form">
+                            <div class="form-group">
+                                <label for="new-titulo">Título (ex: Casa, Trabalho)</label>
+                                <input type="text" id="new-titulo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-cep">CEP</label>
+                                <input type="text" id="new-cep" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-rua">Rua / Avenida</label>
+                                <input type="text" id="new-rua" required>
+                            </div>
+                            <div class="form-group-inline">
+                                <div class="form-group">
+                                    <label for="new-numero">Número</label>
+                                    <input type="text" id="new-numero" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-complemento">Complemento</label>
+                                    <input type="text" id="new-complemento">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-bairro">Bairro</label>
+                                <input type="text" id="new-bairro" required>
+                            </div>
+                            <div class="form-group-inline">
+                                <div class="form-group">
+                                    <label for="new-cidade">Cidade</label>
+                                    <input type="text" id="new-cidade" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-estado">Estado</label>
+                                    <input type="text" id="new-estado" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Salvar Endereço</button>
+                            <p id="new-address-error" class="error-text"></p>
+                        </form>
+                    </div>
+                </fieldset>
+            </section>
+
+            <!-- Coluna da Direita: Resumo do Pedido -->
+            <aside class="checkout-summary">
+                <h3>O seu Pedido</h3>
+                <div id="checkout-summary-items"></div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span id="checkout-total-value">R$ 0,00</span>
+                </div>
+                <!-- O botão de finalizar agora fica fora do <form> -->
+                <button class="btn btn-primary full-width" id="submit-order-btn">Finalizar Pedido no WhatsApp</button>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <!-- O seu rodapé completo vai aqui -->
     </footer>
+
+    <script src="../../js/main.js" defer></script>
+    <script src="../../js/apiConfig.js" type="module"></script>
+    <script src="../../js/apiService.js" type="module"></script>
+    <script src="../../js/modules/authManager.js" type="module"></script>
+    <script src="../../js/modules/global.js" type="module"></script>
+    <script src="../../js/modules/checkout.js" type="module"></script>
+</body>
+
+</html>
+
 
     <script src="../../js/main.js" defer></script>
     <script src="../../js/modules/global.js" type="module"></script>

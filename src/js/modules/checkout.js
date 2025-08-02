@@ -18,14 +18,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const summaryItemsContainer = document.getElementById('checkout-summary-items');
     const totalValueElement = document.getElementById('checkout-total-value');
     const userNameInput = document.getElementById('checkout-name');
+    
+    // --- Elementos do Novo Formulário de Endereço ---
+    const addNewAddressBtn = document.getElementById('add-new-address-btn');
+    const newAddressFormContainer = document.getElementById('new-address-form-container');
+    const newAddressForm = document.getElementById('new-address-form');
 
     // --- Variáveis de estado ---
     let cartData = null;
     let selectedAddressId = null;
-    let userAddresses = []; // Armazena os endereços carregados
+    let userAddresses = [];
 
     /**
-     * Renderiza o resumo do pedido com base nos dados do carrinho vindos da API.
+     * Renderiza o resumo do pedido.
      */
     function renderSummary() {
         summaryItemsContainer.innerHTML = '';
@@ -57,10 +62,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function loadAddresses() {
         try {
             const addresses = await fetchWithAuth('/api/enderecos');
-            userAddresses = addresses; // Salva os endereços para uso posterior
+            userAddresses = addresses;
             savedAddressesContainer.innerHTML = '';
 
             if (addresses.length > 0) {
+                // ⭐ CORREÇÃO 1: Habilita o botão de finalizar o pedido.
+                if (submitOrderBtn) submitOrderBtn.disabled = false;
+
                 addresses.forEach(address => {
                     const addressElement = document.createElement('div');
                     addressElement.className = 'address-option';
@@ -75,9 +83,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     savedAddressesContainer.appendChild(addressElement);
                 });
                 
+                // ⭐ CORREÇÃO 2: Garante que um endereço esteja sempre selecionado.
                 const principal = addresses.find(a => a.endereco_principal);
                 if (principal) {
                     selectedAddressId = principal.id;
+                } else if (addresses.length > 0) {
+                    // Se não houver endereço principal, seleciona o primeiro da lista.
+                    selectedAddressId = addresses[0].id;
+                    const firstRadio = document.getElementById(`address-${addresses[0].id}`);
+                    if (firstRadio) firstRadio.checked = true;
                 }
 
                 document.querySelectorAll('input[name="address"]').forEach(radio => {
@@ -85,8 +99,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
 
             } else {
-                savedAddressesContainer.innerHTML = '<p>Nenhum endereço cadastrado. <a href="../conta/cadastrar-endereco.html" target="_blank">Adicione um endereço</a> antes de continuar.</p>';
-                submitOrderBtn.disabled = true;
+                savedAddressesContainer.innerHTML = '<p>Nenhum endereço cadastrado.</p>';
+                newAddressFormContainer.classList.remove('hidden');
+                addNewAddressBtn.style.display = 'none';
+                if (submitOrderBtn) submitOrderBtn.disabled = true;
             }
 
         } catch (error) {
@@ -96,7 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     /**
-     * Lida com o envio do pedido para o backend e redireciona para o WhatsApp.
+     * Lida com o envio do pedido para o backend.
      */
     async function submitOrder() {
         if (!selectedAddressId) {
@@ -116,21 +132,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         try {
-            // 1. Cria o pedido no backend de forma segura
             const createdOrderResponse = await fetchWithAuth('/api/pedidos', {
                 method: 'POST',
-                body: orderPayload // CORREÇÃO: Passa o objeto diretamente
+                body: orderPayload
             });
 
-            // 2. Busca o número de WhatsApp do admin no backend
             const contactResponse = await fetch(`${API_BASE_URL}/api/site/contact-info`);
-            if (!contactResponse.ok) {
-                throw new Error('Não foi possível obter o contato da loja.');
-            }
+            if (!contactResponse.ok) throw new Error('Não foi possível obter o contato da loja.');
+            
             const contactInfo = await contactResponse.json();
             const whatsappNumber = contactInfo.whatsappNumber;
-
-            // 3. Prepara a mensagem para o WhatsApp
             const customerName = userNameInput.value || authManager.getUser().nome_usuario;
             const total = cartData.total;
             const pedidoId = createdOrderResponse.pedidoId;
@@ -148,14 +159,47 @@ document.addEventListener('DOMContentLoaded', async () => {
             message += `Aguardo as instruções para o pagamento. Obrigado!`;
             
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            
-            // 4. Redireciona o usuário para o WhatsApp
             window.location.href = whatsappURL;
 
         } catch (error) {
             alert(`Erro: ${error.message}`);
             submitOrderBtn.textContent = 'Finalizar Pedido';
             submitOrderBtn.disabled = false;
+        }
+    }
+
+    /**
+     * Lida com o envio do formulário de novo endereço.
+     */
+    async function handleNewAddressSubmit(event) {
+        event.preventDefault();
+        const errorElement = document.getElementById('new-address-error');
+        if(errorElement) errorElement.textContent = '';
+
+        const payload = {
+            titulo: document.getElementById('new-titulo').value,
+            cep: document.getElementById('new-cep').value,
+            rua: document.getElementById('new-rua').value,
+            numero: document.getElementById('new-numero').value,
+            complemento: document.getElementById('new-complemento').value,
+            bairro: document.getElementById('new-bairro').value,
+            cidade: document.getElementById('new-cidade').value,
+            estado: document.getElementById('new-estado').value,
+        };
+
+        try {
+            await fetchWithAuth('/api/enderecos', {
+                method: 'POST',
+                body: payload
+            });
+            
+            newAddressFormContainer.classList.add('hidden');
+            addNewAddressBtn.style.display = 'block';
+            await loadAddresses();
+
+        } catch (error) {
+            if(errorElement) errorElement.textContent = error.message;
+            console.error('Erro ao salvar novo endereço:', error);
         }
     }
 
@@ -177,7 +221,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             renderSummary();
             await loadAddresses();
+            
+            // --- Adiciona os Event Listeners ---
             submitOrderBtn.addEventListener('click', submitOrder);
+            if (addNewAddressBtn) {
+                addNewAddressBtn.addEventListener('click', () => {
+                    newAddressFormContainer.classList.toggle('hidden');
+                });
+            }
+            if (newAddressForm) {
+                newAddressForm.addEventListener('submit', handleNewAddressSubmit);
+            }
+
         } catch (error) {
             console.error('Erro ao inicializar o checkout:', error);
             document.body.innerHTML = '<h1>Erro ao carregar dados do checkout. Tente novamente mais tarde.</h1>';
