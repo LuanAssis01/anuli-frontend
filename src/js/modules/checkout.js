@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             savedAddressesContainer.innerHTML = '';
 
             if (addresses.length > 0) {
-                // ⭐ CORREÇÃO 1: Habilita o botão de finalizar o pedido.
                 if (submitOrderBtn) submitOrderBtn.disabled = false;
 
                 addresses.forEach(address => {
@@ -83,12 +82,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     savedAddressesContainer.appendChild(addressElement);
                 });
                 
-                // ⭐ CORREÇÃO 2: Garante que um endereço esteja sempre selecionado.
                 const principal = addresses.find(a => a.endereco_principal);
                 if (principal) {
                     selectedAddressId = principal.id;
                 } else if (addresses.length > 0) {
-                    // Se não houver endereço principal, seleciona o primeiro da lista.
                     selectedAddressId = addresses[0].id;
                     const firstRadio = document.getElementById(`address-${addresses[0].id}`);
                     if (firstRadio) firstRadio.checked = true;
@@ -137,11 +134,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 body: orderPayload
             });
 
+            // ⭐ ALTERAÇÃO: Busca o NÚMERO de WhatsApp do admin no backend ⭐
             const contactResponse = await fetch(`${API_BASE_URL}/api/site/contact-info`);
             if (!contactResponse.ok) throw new Error('Não foi possível obter o contato da loja.');
             
             const contactInfo = await contactResponse.json();
-            const whatsappNumber = contactInfo.whatsappNumber;
+            const whatsappNumber = contactInfo.whatsappNumber; // Usa a nova propriedade
+
+            // Prepara a mensagem para o WhatsApp
             const customerName = userNameInput.value || authManager.getUser().nome_usuario;
             const total = cartData.total;
             const pedidoId = createdOrderResponse.pedidoId;
@@ -158,7 +158,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             message += `Aguardo as instruções para o pagamento. Obrigado!`;
             
+            // ⭐ ALTERAÇÃO: Constrói o URL do WhatsApp usando o número de telefone ⭐
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            
+            // Redireciona o utilizador para o WhatsApp
             window.location.href = whatsappURL;
 
         } catch (error) {

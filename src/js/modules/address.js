@@ -9,7 +9,7 @@ import { authManager } from './authManager.js';
 async function loadAddresses() {
     // Verifica se o usuário está logado antes de prosseguir
     if (!authManager.isLoggedIn()) {
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = '/src/html/auth/login.html';
         return;
     }
 

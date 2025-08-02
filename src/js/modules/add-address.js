@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Verifica se o usuário está logado antes de adicionar listeners
     if (!authManager.isLoggedIn()) {
         // Se a página for acessada diretamente, redireciona
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = '/src/html/auth/login.html';
         return;
     }
 

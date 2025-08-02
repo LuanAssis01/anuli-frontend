@@ -9,7 +9,7 @@ import { authManager } from './authManager.js';
 async function loadUserOrders() {
     // 1. Verifica se o usuário está logado antes de fazer qualquer coisa
     if (!authManager.isLoggedIn()) {
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = '/src/html/auth/login.html';
         return;
     }
 

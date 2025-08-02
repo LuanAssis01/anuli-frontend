@@ -11,50 +11,72 @@ document.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('name');
     const emailInput = document.getElementById('email');
     const formMessage = document.getElementById('form-message');
+    
+    // Elementos específicos para o administrador
+    const whatsappLinkGroup = document.getElementById('whatsapp-link-group');
+    const whatsappLinkInput = document.getElementById('whatsapp-link');
+    
+    // Elementos de senha
+    const currentPasswordInput = document.getElementById('current-password');
+    const newPasswordInput = document.getElementById('new-password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
 
-    // 1. Pega os dados do usuário do nosso authManager seguro
+    // 1. Pega os dados do utilizador do nosso authManager seguro
     const user = authManager.getUser();
 
-    // Se não houver dados de usuário, não faz nada (a página da conta já deve ter redirecionado)
+    // Se não houver dados de utilizador, não faz nada (a página da conta já deve ter redirecionado)
     if (!user) return;
 
-    // 2. Preenche o formulário com os dados atuais do usuário
+    // 2. Preenche o formulário com os dados atuais do utilizador
     nameInput.value = user.nome_usuario;
     emailInput.value = user.email_usuario;
+    emailInput.disabled = true; // O e-mail não deve ser editável
+
+    // Mostra o campo de link do WhatsApp apenas se o utilizador for admin
+    if (user.tipo_cadastro === 'admin' && whatsappLinkGroup) {
+        whatsappLinkGroup.style.display = 'block';
+        if (whatsappLinkInput && user.whatsapp_link) {
+            whatsappLinkInput.value = user.whatsapp_link;
+        }
+    }
 
     // 3. Escuta o evento de submit do formulário
     accountForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        if (formMessage) formMessage.textContent = ''; // Limpa mensagens antigas
+        if (formMessage) {
+            formMessage.textContent = '';
+            formMessage.className = '';
+        }
 
-        // Coleta os dados do formulário
+        // Coleta os dados do formulário que são permitidos pelo backend
         const updatedData = {
             nome_usuario: nameInput.value,
-            email_usuario: emailInput.value
         };
 
-        // Lógica para alteração de senha
-        const currentPassword = document.getElementById('current-password').value;
-        const newPassword = document.getElementById('new-password').value;
-        const confirmPassword = document.getElementById('confirm-password').value;
-
-        // Só adiciona os campos de senha ao payload se uma nova senha for digitada
+        // Adiciona o link do WhatsApp ao payload apenas se o utilizador for admin
+        if (user.tipo_cadastro === 'admin' && whatsappLinkInput) {
+            updatedData.whatsapp_link = whatsappLinkInput.value;
+        }
+        
+        // ⭐ LÓGICA DE SENHA ATUALIZADA ⭐
+        // Adiciona os campos de senha ao payload apenas se uma nova senha for inserida
+        const newPassword = newPasswordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
         if (newPassword) {
             if (newPassword !== confirmPassword) {
                 formMessage.textContent = 'A nova senha e a confirmação não coincidem.';
                 formMessage.className = 'error-text';
                 return;
             }
-            updatedData.senha_atual = currentPassword;
+            updatedData.senha_atual = currentPasswordInput.value;
             updatedData.nova_senha = newPassword;
         }
 
         try {
-            // 4. Envia a requisição para a API usando nossa função segura
-            // O ID do usuário é pego do authManager e a rota do backend já sabe como lidar com isso.
+            // 4. Envia a requisição para a API usando a nossa função segura
             const result = await fetchWithAuth(`/api/users/${user.id}`, {
                 method: 'PUT',
-                body: JSON.stringify(updatedData)
+                body: updatedData // Passa o objeto JavaScript diretamente
             });
 
             // 5. Sucesso!
@@ -62,11 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
             formMessage.className = 'success-text';
 
             // Limpa os campos de senha após o sucesso
-            if (document.getElementById('current-password')) document.getElementById('current-password').value = '';
-            if (document.getElementById('new-password')) document.getElementById('new-password').value = '';
-            if (document.getElementById('confirm-password')) document.getElementById('confirm-password').value = '';
+            currentPasswordInput.value = '';
+            newPasswordInput.value = '';
+            confirmPasswordInput.value = '';
 
-            // 6. Atualiza os dados do usuário no sessionStorage para refletir a mudança
+            // 6. Atualiza os dados do utilizador no sessionStorage para refletir a mudança
             authManager.login(result);
 
         } catch (error) {

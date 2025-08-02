@@ -10,7 +10,7 @@ import { API_BASE_URL } from '../apiConfig.js';
 function checkAdminAuth() {
     if (!authManager.isLoggedIn() || authManager.getUserType() !== 'admin') {
         alert('Acesso negado. Você precisa ser um administrador.');
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = '/src/html/auth/login.html';
         return false;
     }
     return true;

@@ -18,6 +18,7 @@ async function initProductDetailPage() {
     const descriptionElement = document.getElementById('product-short-description');
     const addToCartButton = document.querySelector('.btn-add-to-cart');
     const quantityInput = document.querySelector('.quantity-selector input');
+    const whatsappContactBtn = document.getElementById('whatsapp-contact-btn');
 
     // --- Pega o ID do produto da URL ---
     const params = new URLSearchParams(window.location.search);
@@ -72,13 +73,12 @@ async function initProductDetailPage() {
             addToCartButton.addEventListener('click', async () => {
                 if (!authManager.isLoggedIn()) {
                     alert('Você precisa estar logado para adicionar produtos ao carrinho.');
-                    // ⭐ CAMINHO CORRIGIDO POR VOCÊ ⭐
-                    window.location.href = '/frontend/src/html/auth/login.html';
+                    window.location.href = '/src/html/auth/login.html';
                     return;
                 }
 
                 const quantity = parseInt(quantityInput.value);
-                addToCartButton.textContent = 'Adicionando...';
+                addToCartButton.textContent = 'A adicionar...';
                 addToCartButton.disabled = true;
 
                 try {
@@ -101,6 +101,37 @@ async function initProductDetailPage() {
                     alert(error.message);
                     addToCartButton.textContent = 'Adicionar ao Carrinho';
                     addToCartButton.disabled = false;
+                }
+            });
+        }
+
+        // --- Lógica para o Botão WhatsApp ---
+        if (whatsappContactBtn) {
+            whatsappContactBtn.addEventListener('click', async () => {
+                try {
+                    const contactResponse = await fetch(`${API_BASE_URL}/api/site/contact-info`);
+                    if (!contactResponse.ok) throw new Error('Não foi possível obter o contacto da loja.');
+                    
+                    const contactInfo = await contactResponse.json();
+                    const whatsappBaseLink = contactInfo.whatsappLink;
+                    
+                    // ⭐ MENSAGEM ATUALIZADA AQUI ⭐
+                    const productPrice = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                    const productUrl = window.location.href; // Pega o URL da página atual
+
+                    // let message = `Olá! Tenho uma dúvida sobre o seguinte produto:\n\n`;
+                    message += `*Produto:* ${product.nome}\n`;
+                    message += `*Preço:* ${productPrice}\n`;
+                    message += `*Link:* ${productUrl}\n\n`;
+                    
+                    const separator = whatsappBaseLink.includes('?') ? '&' : '?';
+                    const whatsappURL = `${whatsappBaseLink}${separator}text=${encodeURIComponent(message)}`;
+                    
+                    window.open(whatsappURL, '_blank');
+
+                } catch (error) {
+                    console.error('Erro ao gerar link do WhatsApp:', error);
+                    alert('Não foi possível abrir o contacto do WhatsApp. Tente novamente mais tarde.');
                 }
             });
         }

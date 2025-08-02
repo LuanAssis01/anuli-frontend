@@ -9,7 +9,7 @@ import { API_BASE_URL } from '../apiConfig.js';
  */
 async function loadOrderDetails() {
     if (!authManager.isLoggedIn()) {
-        window.location.href = '/frontend/src/html/auth/login.html';
+        window.location.href = '/src/html/auth/login.html';
         return;
     }
 

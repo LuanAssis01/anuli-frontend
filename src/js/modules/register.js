@@ -3,71 +3,90 @@
 import { fetchWithAuth } from '../apiService.js';
 import { authManager } from './authManager.js';
 import { USER_ACCOUNT_URL } from '../apiConfig.js';
+// Importa as nossas novas funções de validação
+import {
+    isNotEmpty,
+    isValidEmail,
+    isValidPhone,
+    isStrongPassword,
+    doPasswordsMatch,
+    showError,
+    clearError
+} from '../utils/validation.js';
 
 const registerForm = document.getElementById('register-form');
-const errorMessage = document.getElementById('error-message');
-const submitButton = registerForm ? registerForm.querySelector('button[type="submit"]') : null;
 
-if (registerForm && submitButton) {
+if (registerForm) {
+    // Seleciona todos os inputs para facilitar o uso
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const allInputs = [nameInput, emailInput, phoneInput, passwordInput, confirmPasswordInput];
+    const submitButton = registerForm.querySelector('button[type="submit"]');
+
     registerForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         
-        if (errorMessage) {
-            errorMessage.textContent = '';
-            errorMessage.className = '';
+        // 1. Limpa todos os erros antigos
+        allInputs.forEach(clearError);
+
+        // 2. Executa a validação campo a campo
+        let isValid = true;
+        if (!isNotEmpty(nameInput.value)) {
+            showError(nameInput, 'O nome é obrigatório.');
+            isValid = false;
+        }
+        if (!isValidEmail(emailInput.value)) {
+            showError(emailInput, 'Por favor, insira um e-mail válido.');
+            isValid = false;
+        }
+        if (!isValidPhone(phoneInput.value)) {
+            showError(phoneInput, 'Por favor, insira um telefone válido (10 ou 11 dígitos).');
+            isValid = false;
+        }
+        if (!isStrongPassword(passwordInput.value)) {
+            showError(passwordInput, 'A senha deve ter pelo menos 6 caracteres.');
+            isValid = false;
+        }
+        if (!doPasswordsMatch(passwordInput.value, confirmPasswordInput.value)) {
+            showError(confirmPasswordInput, 'As senhas não coincidem.');
+            isValid = false;
         }
 
-        // Coleta os dados do formulário
-        const nome = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const telefone = document.getElementById('phone').value;
-        const senha = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm-password').value;
-
-        // Validação no frontend
-        if (senha !== confirmPassword) {
-            if (errorMessage) {
-                errorMessage.textContent = 'As senhas não coincidem.';
-                errorMessage.className = 'error-text';
-            }
+        // 3. Se algum campo for inválido, para a execução
+        if (!isValid) {
             return;
         }
 
-        // Gestão do estado do botão
+        // --- Lógica de submissão (só é executada se a validação passar) ---
         const originalButtonText = submitButton.textContent;
         submitButton.disabled = true;
-        submitButton.textContent = 'Criando conta...';
+        submitButton.textContent = 'A criar conta...';
 
         try {
-            // ⭐ CORREÇÃO AQUI ⭐
-            // Passamos um objeto JavaScript puro. O apiService.js cuidará do JSON.stringify.
+            const payload = {
+                nome_usuario: nameInput.value,
+                email_usuario: emailInput.value,
+                senha_usuario: passwordInput.value,
+                telefone_usuario: phoneInput.value,
+            };
+
             const responseData = await fetchWithAuth('/api/users', {
                 method: 'POST',
-                body: {
-                    nome_usuario: nome,
-                    email_usuario: email,
-                    senha_usuario: senha,
-                    telefone_usuario: telefone,
-                    tipo_cadastro: 'cliente'
-                }
+                body: payload
             });
 
             const user = responseData.user;
-
-            // Faz o login automático do utilizador após o cadastro
             authManager.login(user);
-            
-            // Redireciona para a página da conta
             window.location.href = USER_ACCOUNT_URL;
 
         } catch (error) {
-            if (errorMessage) {
-                errorMessage.textContent = error.message;
-                errorMessage.className = 'error-text';
-            }
+            // Mostra o erro da API num local geral do formulário
+            showError(submitButton, error.message);
             console.error('Erro no cadastro:', error);
         } finally {
-            // Garante que o botão seja reativado
             submitButton.disabled = false;
             submitButton.textContent = originalButtonText;
         }

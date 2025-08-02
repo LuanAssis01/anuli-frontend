@@ -58,7 +58,7 @@
         </div>
     </header>
 
-    <main class="container account-page-container">
+<main class="container account-page-container">
         <div class="account-layout">
             <aside class="account-sidebar">
                 <ul>
@@ -71,40 +71,44 @@
             </aside>
 
             <section class="account-content">
-                <h2>Dados Pessoais</h2>
-                <form class="account-form" id="account-form">
-                    <fieldset>
-                        <legend>Alterar dados</legend>
-                        <div class="form-group">
-                            <label for="name">Nome completo</label>
-                            <input type="text" id="name" value="">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">E-mail</label>
-                            <input type="email" id="email" value="">
-                        </div>
-                    </fieldset>
+                <div class="content-header">
+                    <h2>Dados Pessoais</h2>
+                </div>
+                <form id="account-form" class="account-form">
+                    <div class="form-group">
+                        <label for="name">Nome Completo</label>
+                        <input type="text" id="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" disabled>
+                    </div>
 
-                    <fieldset>
-                        <legend>Alterar senha</legend>
-                        <p class="form-description">Deixe os campos em branco para não alterar a senha.</p>
-                        <div class="form-group">
-                            <label for="current-password">Senha atual</label>
-                            <input type="password" id="current-password">
-                        </div>
-                        <div class="form-group">
-                            <label for="new-password">Nova senha</label>
-                            <input type="password" id="new-password">
-                        </div>
-                        <div class="form-group">
-                            <label for="confirm-password">Confirmar nova senha</label>
-                            <input type="password" id="confirm-password">
-                        </div>
-                    </fieldset>
+                    <!-- ⭐ NOVO CAMPO ADICIONADO ⭐ -->
+                    <!-- Este campo só será visível para administradores -->
+                    <div class="form-group" id="whatsapp-link-group" style="display: none;">
+                        <label for="whatsapp-link">Link do WhatsApp para Contacto</label>
+                        <input type="url" id="whatsapp-link" placeholder="https://wa.me/seu-link">
+                        <small>Este link será usado no checkout para os clientes finalizarem a compra.</small>
+                    </div>
 
-                    <p id="form-message"></p>
+                    <hr>
+                    <h4>Alterar Senha</h4>
+                    <div class="form-group">
+                        <label for="current-password">Senha Atual</label>
+                        <input type="password" id="current-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">Nova Senha</label>
+                        <input type="password" id="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirmar Nova Senha</label>
+                        <input type="password" id="confirm-password">
+                    </div>
 
                     <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    <p id="form-message"></p>
                 </form>
             </section>
         </div>
