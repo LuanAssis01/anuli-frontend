@@ -64,11 +64,6 @@ select {
   --raio-borda: 8px;
 }
 
-
-/* =================================
-   3. Estilos Globais (body)
-   ================================= */
-
 body {
   font-family: var(--fonte-principal);
   background-color: var(--branco-fundo);

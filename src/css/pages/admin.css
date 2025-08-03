@@ -5,6 +5,7 @@
 body.admin-body {
     background-color: #f0f2f5;
     color: #333;
+    font-family: 'Inter', sans-serif;
 }
 
 .admin-layout {
@@ -69,7 +70,7 @@ body.admin-body {
     margin-bottom: 30px;
 }
 
-.content-header h1 {
+.content-header h1, .content-header h2 {
     font-size: 28px;
     margin: 0;
 }
@@ -108,14 +109,6 @@ body.admin-body {
     overflow-x: auto;
 }
 
-/* --- Tabelas --- */
-.table-container {
-    background-color: var(--branco-fundo, #fff);
-    border-radius: var(--raio-borda, 8px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    overflow-x: auto;
-}
-
 .admin-table {
     width: 100%;
     border-collapse: collapse;
@@ -127,7 +120,6 @@ body.admin-body {
     text-align: left;
     border-bottom: 1px solid #f0f2f5;
     vertical-align: middle;
-    /* Garante alinhamento vertical centralizado */
 }
 
 .admin-table th {
@@ -141,25 +133,6 @@ body.admin-body {
     background-color: #f8f9fa;
 }
 
-/* ⭐ AJUSTES DE ALINHAMENTO AQUI ⭐ */
-.admin-table th:nth-child(3),
-/* Cabeçalho Estoque */
-.admin-table td:nth-child(3),
-/* Célula Estoque */
-.admin-table th:nth-child(5),
-/* Cabeçalho Ações */
-.admin-table td:nth-child(5) {
-    /* Célula Ações */
-    text-align: center;
-}
-
-.admin-table th:nth-child(4),
-/* Cabeçalho Preço */
-.admin-table td:nth-child(4) {
-    /* Célula Preço */
-    text-align: right;
-}
-
 .product-cell {
     display: flex;
     align-items: center;
@@ -182,18 +155,9 @@ body.admin-body {
     display: inline-block;
 }
 
-.stock-ok {
-    background-color: var(--sucesso, #28a745);
-}
-
-.stock-low {
-    background-color: var(--amarelo-destaque, #FFC107);
-    color: var(--preto-texto, #212529);
-}
-
-.stock-out {
-    background-color: var(--erro, #dc3545);
-}
+.stock-ok { background-color: #28a745; }
+.stock-low { background-color: #FFC107; color: #212529; }
+.stock-out { background-color: #dc3545; }
 
 .action-buttons {
     display: flex;
@@ -201,66 +165,11 @@ body.admin-body {
     justify-content: center;
 }
 
-/* Centraliza os botões */
-
-.product-cell {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.product-cell img {
-    width: 50px;
-    height: 50px;
-    border-radius: 6px;
-    object-fit: cover;
-}
-
-.stock {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-    display: inline-block;
-}
-
-.stock-ok {
-    background-color: #28a745;
-}
-
-.stock-low {
-    background-color: #FFC107;
-    color: #212529;
-}
-
-.stock-out {
-    background-color: #dc3545;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 10px;
-}
-
 /* --- Formulários --- */
 .admin-form .form-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 30px;
-}
-
-.admin-form fieldset {
-    border: none;
-    padding: 0;
-    margin: 0;
-}
-
-.admin-form legend {
-    font-size: 18px;
-    font-weight: 600;
-    padding: 0;
-    margin-bottom: 20px;
 }
 
 .admin-form .form-group {
@@ -276,6 +185,7 @@ body.admin-body {
 
 .admin-form input[type="text"],
 .admin-form input[type="number"],
+.admin-form input[type="url"],
 .admin-form textarea,
 .admin-form select,
 .admin-form input[type="file"] {
@@ -284,6 +194,7 @@ body.admin-body {
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 14px;
+    box-sizing: border-box;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -309,6 +220,7 @@ body.admin-body {
 
 .form-sidebar-column .form-card h4 {
     font-size: 16px;
+    margin-top: 0;
     margin-bottom: 20px;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
@@ -319,6 +231,103 @@ body.admin-body {
     border-top: 1px solid #eee;
     padding-top: 30px;
     text-align: right;
+}
+
+/* --- Estilos para o Modal de Novo Fornecedor --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay:not(.hidden) .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+/* --- ⭐ CORREÇÃO DEFINITIVA COM GRID ⭐ --- */
+.form-group.has-button {
+    display: grid;
+    /* Duas colunas: uma que cresce e uma de tamanho automático */
+    grid-template-columns: 1fr auto; 
+    align-items: center;
+    gap: 8px 10px; /* Espaçamento entre linhas e colunas */
+}
+
+.form-group.has-button label {
+    /* Força a label a ocupar a linha inteira, em todas as colunas */
+    grid-column: 1 / -1; 
+    margin-bottom: 0;
+}
+
+/* O select e o botão irão automaticamente para a próxima linha */
+
+.add-new-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    background-color: #f0f2f5;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.add-new-btn:hover {
+    background-color: #e6e8eb;
+    border-color: #b0b0b0;
 }
 
 /* --- Responsividade --- */
