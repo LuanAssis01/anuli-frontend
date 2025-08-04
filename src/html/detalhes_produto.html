@@ -60,30 +60,36 @@
     </header>
 
     <main class="container product-page-container">
-        <div class="product-details-layout">
-            <div class="product-gallery">
-                <img id="main-product-image" src="https://placehold.co/500x500/eee/ccc?text=A+carregar..."
-                    alt="Imagem principal do produto">
-                <div class="thumbnail-images">
-                    <!-- As miniaturas serão carregadas aqui -->
-                </div>
+
+        <div class="product-gallery">
+            <img id="main-product-image" src="https://placehold.co/500x500/eee/ccc?text=A+carregar..."
+                alt="Imagem principal do produto">
+            <div class="thumbnail-images">
             </div>
-            <div class="product-info">
+        </div>
+
+        <div class="product-info">
+            <div class="product-header">
                 <span id="product-category-detail">Categoria</span>
                 <h1 id="product-title-detail">A carregar nome do produto...</h1>
-                <p id="product-price-detail">R$ 0,00</p>
-                <p id="product-short-description">A carregar descrição...</p>
+            </div>
 
+            <div class="price-section">
+                <p id="product-price-detail">R$ 0,00</p>
+                <span class="installments">ou em até 3x sem juros</span>
+            </div>
+
+            <p id="product-short-description">A carregar descrição...</p>
+
+            <div class="product-actions-panel">
                 <div class="product-actions">
                     <div class="quantity-selector">
-                        <button>-</button>
-                        <input type="number" value="1" min="1">
-                        <button>+</button>
+                        <button class="quantity-btn" aria-label="Diminuir quantidade">-</button>
+                        <input type="number" value="1" min="1" aria-label="Quantidade">
+                        <button class="quantity-btn" aria-label="Aumentar quantidade">+</button>
                     </div>
                     <button class="btn btn-primary btn-add-to-cart">Adicionar ao Carrinho</button>
                 </div>
-
-                <!-- ⭐ NOVO BOTÃO DE WHATSAPP ADICIONADO ⭐ -->
                 <button class="btn btn-secondary btn-whatsapp" id="whatsapp-contact-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -93,9 +99,40 @@
                     </svg>
                     <span>Dúvidas? Fale no WhatsApp</span>
                 </button>
+            </div>
 
+            <div class="product-extra-details">
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>Especificações</span>
+                        <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Material: Aço inoxidável 316L (hipoalergênico)<br>Acabamento: Polido<br>Dimensões: Consulte a
+                            imagem</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>Cuidados com a Peça</span>
+                        <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Para manter o brilho da sua joia, evite contato com produtos químicos e guarde-a
+                            separadamente.</p>
+                    </div>
+                </div>
             </div>
         </div>
+
     </main>
 
     <footer class="main-footer">

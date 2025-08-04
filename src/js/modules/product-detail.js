@@ -44,18 +44,22 @@ async function initProductDetailPage() {
         
         // --- Preenche a Galeria de Imagens ---
         if (product.imagens && product.imagens.length > 0) {
+            const firstImageUrl = product.imagens[0].url;
+
             if (mainImage) {
-                mainImage.src = `${API_BASE_URL}/${product.imagens[0].url}`;
+                mainImage.src = firstImageUrl; // AJUSTE 1: URL direta
                 mainImage.alt = product.nome;
             }
             if (thumbnailsContainer) {
                 thumbnailsContainer.innerHTML = '';
-                product.imagens.forEach((image, index) => {
+                product.imagens.forEach((image) => {
                     const thumb = document.createElement('img');
-                    thumb.src = `${API_BASE_URL}/${image.url}`;
-                    thumb.alt = `Thumbnail ${index + 1}`;
+                    thumb.src = image.url; // AJUSTE 2: URL direta
+                    thumb.alt = `Thumbnail de ${product.nome}`;
                     thumb.className = 'thumbnail';
-                    if (index === 0) thumb.classList.add('active');
+                    if (image.url === firstImageUrl) {
+                        thumb.classList.add('active');
+                    }
                     
                     thumb.addEventListener('click', () => {
                         if (mainImage) mainImage.src = thumb.src;
@@ -115,11 +119,11 @@ async function initProductDetailPage() {
                     const contactInfo = await contactResponse.json();
                     const whatsappBaseLink = contactInfo.whatsappLink;
                     
-                    // ⭐ MENSAGEM ATUALIZADA AQUI ⭐
                     const productPrice = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                    const productUrl = window.location.href; // Pega o URL da página atual
-
-                    // let message = `Olá! Tenho uma dúvida sobre o seguinte produto:\n\n`;
+                    const productUrl = window.location.href; 
+                    
+                    // AJUSTE 3: Declarando a variável message
+                    let message = `Olá! Tenho uma dúvida sobre o seguinte produto:\n\n`;
                     message += `*Produto:* ${product.nome}\n`;
                     message += `*Preço:* ${productPrice}\n`;
                     message += `*Link:* ${productUrl}\n\n`;
@@ -158,4 +162,27 @@ async function initProductDetailPage() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', initProductDetailPage);
+function setupAccordion() {
+    const accordionItems = document.querySelectorAll('.accordion-item');
+    accordionItems.forEach(item => {
+        const header = item.querySelector('.accordion-header');
+        header.addEventListener('click', () => {
+            const content = item.querySelector('.accordion-content');
+            
+            // Alterna a classe 'active' no item
+            item.classList.toggle('active');
+
+            // Anima a abertura/fechamento
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initProductDetailPage();
+    setupAccordion(); // <-- Adicione esta linha
+});

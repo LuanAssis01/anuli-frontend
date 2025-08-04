@@ -29,7 +29,6 @@ async function initProductForm() {
     const stockInput = document.getElementById('quantidade_estoque');
     const categoryInput = document.getElementById('categoria_id');
     const fornecedorInput = document.getElementById('fornecedor_id');
-    const skuInput = document.getElementById('sku');
     const imageInput = document.getElementById('imagens');
     const imagePreviewContainer = document.getElementById('image-preview');
 
@@ -156,7 +155,6 @@ async function initProductForm() {
             if (descriptionInput) descriptionInput.value = product.descricao;
             if (priceInput) priceInput.value = product.preco;
             if (stockInput) stockInput.value = product.quantidade_estoque;
-            if (skuInput) skuInput.value = product.sku;
             if (categoryInput) categoryInput.value = product.categoria_id;
             if (fornecedorInput) fornecedorInput.value = product.fornecedor_id;
 
@@ -166,7 +164,7 @@ async function initProductForm() {
                 imagePreviewContainer.appendChild(currentImagesHeader);
                 product.imagens.forEach(img => {
                     const imgEl = document.createElement('img');
-                    imgEl.src = `${API_BASE_URL}/${img.url}`;
+                    imgEl.src = img.url
                     imgEl.style.cssText = 'max-width: 100px; border-radius: 6px; margin: 5px;';
                     imagePreviewContainer.appendChild(imgEl);
                 });
@@ -190,7 +188,6 @@ async function initProductForm() {
             formData.append('preco', priceInput.value);
             formData.append('quantidade_estoque', stockInput.value);
             formData.append('categoria_id', categoryInput.value);
-            formData.append('sku', skuInput.value);
             formData.append('fornecedor_id', fornecedorInput.value);
 
             if (imageInput.files.length > 0) {

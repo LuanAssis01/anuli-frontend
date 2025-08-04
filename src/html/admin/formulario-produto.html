@@ -73,7 +73,9 @@
             <div class="table-container">
                 <form id="product-form" class="admin-form">
                     <div class="form-grid">
+
                         <div class="form-main-column">
+
                             <div class="form-card">
                                 <h4>Informações Básicas</h4>
                                 <div class="form-group">
@@ -85,9 +87,10 @@
                                     <textarea id="descricao" name="descricao" rows="4"></textarea>
                                 </div>
                             </div>
+
                             <div class="form-card">
                                 <h4>Preço e Estoque</h4>
-                                <div class="form-group-inline">
+                                <div class="form-grid-inline">
                                     <div class="form-group">
                                         <label for="preco">Preço (R$)</label>
                                         <input type="number" id="preco" name="preco" step="0.01" required>
@@ -98,36 +101,35 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="form-sidebar-column">
+
                             <div class="form-card">
                                 <h4>Organização</h4>
-                                <!-- ⭐ CAMPO DE FORNECEDOR ADICIONADO ⭐ -->
-                                <div class="form-group">
+
+                                <div class="form-group has-button">
                                     <label for="fornecedor_id">Fornecedor</label>
                                     <select id="fornecedor_id" name="fornecedor_id">
-                                        <option value="">Nenhum</option>
-                                        <!-- Os fornecedores serão carregados aqui -->
                                     </select>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="categoria_id">Categoria</label>
                                     <select id="categoria_id" name="categoria_id" required>
-                                        <option value="">A carregar...</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="sku">SKU (Código de Barras)</label>
-                                    <input type="text" id="sku" name="sku">
-                                </div>
                             </div>
+
                             <div class="form-card">
                                 <h4>Imagens do Produto</h4>
-                                <p style="font-size: 12px; color: #666; margin-top: -15px; margin-bottom: 10px;">A
-                                    primeira imagem será a principal.</p>
+                                <p style="font-size: 12px; color: #666; margin-top: -15px; margin-bottom: 10px;">
+                                    A primeira imagem será a principal.
+                                </p>
                                 <input type="file" id="imagens" name="imagens[]" multiple>
-                                <div id="image-preview"></div>
+                                <div id="image-preview">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -138,47 +140,11 @@
                 </form>
             </div>
         </main>
-    </div>
-
-    <!-- MODAL DE NOVO FORNECEDOR -->
-    <div id="add-fornecedor-modal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Adicionar Novo Fornecedor</h3>
-                <button id="close-fornecedor-modal" class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="new-fornecedor-form" class="admin-form">
-                    <div class="form-group">
-                        <label for="fornecedor-nome">Nome do Fornecedor</label>
-                        <input type="text" id="fornecedor-nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="fornecedor-cnpj">CNPJ</label>
-                        <input type="text" id="fornecedor-cnpj" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="fornecedor-contato">Contacto (Telefone/Email)</label>
-                        <input type="text" id="fornecedor-contato">
-                    </div>
-                    <div class="form-group">
-                        <label for="fornecedor-endereco">Endereço</label>
-                        <input type="text" id="fornecedor-endereco">
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Salvar Fornecedor</button>
-                    </div>
-                    <p id="modal-error-message" class="error-text"></p>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="../../js/apiConfig.js" type="module"></script>
-    <script src="../../js/apiService.js" type="module"></script>
-    <script src="../../js/modules/authManager.js" type="module"></script>
-    <script src="../../js/modules/product-form.js" type="module"></script>
+        <!-- Scripts -->
+        <script src="../../js/apiConfig.js" type="module"></script>
+        <script src="../../js/apiService.js" type="module"></script>
+        <script src="../../js/modules/authManager.js" type="module"></script>
+        <script src="../../js/modules/product-form.js" type="module"></script>
 </body>
 
 </html>

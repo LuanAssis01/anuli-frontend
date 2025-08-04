@@ -6,6 +6,13 @@
     padding-bottom: 40px;
 }
 
+/* Estilo para o link da categoria ativa */
+.filters-sidebar ul li a.active {
+    background-color: var(--azul-principal);
+    color: var(--branco-fundo);
+    font-weight: bold;
+}
+
 /* --- Sidebar de Filtros --- */
 .filters-sidebar {
     background-color: var(--cinza-claro);

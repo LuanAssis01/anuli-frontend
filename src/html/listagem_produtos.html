@@ -22,7 +22,6 @@
 
     <header class="main-header">
         <div class="container header-container">
-            <!-- ⭐ CAMINHOS CORRIGIDOS AQUI ⭐ -->
             <a href="/" class="header-logo-text">ANULI</a>
             <nav class="main-nav">
                 <ul>
@@ -62,44 +61,49 @@
     </header>
 
 
-    <main>
-        <div class="container listing-page-container">
-            <aside class="filters-sidebar">
-                <h3>Filtros</h3>
-                <div class="filter-group">
-                    <h4>Categorias</h4>
-                    <ul>
-                        <li><a href="#" data-category-id="1">Anel</a></li>
-                        <li><a href="#" data-category-id="2">Brinco</a></li>
-                        <li><a href="#" data-category-id="3">Berloque</a></li>
-                        <li><a href="#" data-category-id="4">Colar</a></li>
-                        <li><a href="#" data-category-id="5">Pulseira</a></li>
-                        <li><a href="#" data-category-id="6">Conjunto</a></li>
-                    </ul>
-                </div>
-                <div class="filter-group">
-                    <h4>Preço</h4>
-                    <label for="min-price">De R$</label>
-                    <input type="number" id="min-price" placeholder="0">
-                    <label for="max-price">Até R$</label>
-                    <input type="number" id="max-price" placeholder="500">
-                </div>
-            </aside>
+    <main class="container listing-page-container">
 
-            <section class="product-grid-container">
-                <div class="grid-header">
-                    <h2>Nossos Produtos</h2>
-                    <select name="sort" id="sort">
-                        <option value="relevance">Ordenar por: Relevância</option>
-                        <option value="preco_asc">Menor Preço</option>
-                        <option value="preco_desc">Maior Preço</option>
-                    </select>
+        <aside class="filters-sidebar">
+            <h3>Filtros</h3>
+
+            <button id="clear-filters-btn" class="btn btn-secondary full-width" style="margin-bottom: 20px;">Limpar
+                Filtros</button>
+
+            <div class="filter-group">
+                <h4>Categorias</h4>
+                <ul id="category-filter-list">
+                    <li><a href="#" data-category-id="1">Anel</a></li>
+                    <li><a href="#" data-category-id="2">Brinco</a></li>
+                    <li><a href="#" data-category-id="3">Berloque</a></li>
+                    <li><a href="#" data-category-id="4">Colar</a></li>
+                    <li><a href="#" data-category-id="5">Pulseira</a></li>
+                    <li><a href="#" data-category-id="6">Conjunto</a></li>
+                </ul>
+            </div>
+            <div class="filter-group">
+                <h4>Preço</h4>
+                <div class="price-filter">
+                    <input type="number" id="min-price" placeholder="De R$">
+                    <input type="number" id="max-price" placeholder="Até R$">
                 </div>
-                <div class="product-grid">
-                    <p>Carregando produtos...</p>
-                </div>
-            </section>
-        </div>
+                <button id="price-filter-btn" class="btn btn-primary full-width">Filtrar</button>
+            </div>
+        </aside>
+
+        <section class="product-listing">
+            <div class="grid-header">
+                <h2>Nossos Produtos</h2>
+                <select id="sort">
+                    <option value="relevance">Ordenar por: Relevância</option>
+                    <option value="preco_asc">Preço: Menor para o Maior</option>
+                    <option value="preco_desc">Preço: Maior para o Menor</option>
+                </select>
+            </div>
+            <div class="product-grid">
+                <p>A carregar produtos...</p>
+            </div>
+        </section>
+
     </main>
 
     <footer class="main-footer">
@@ -151,6 +155,7 @@
     <script src="../js/main.js" defer></script>
     <script src="../js/modules/productList.js" type="module"></script>
     <script src="../js//modules/global.js" type="module"></script>
+    <!-- <script src="../js/utils/image-retry.js" type="module"></script> -->
 
 </body>
 

@@ -65,8 +65,9 @@ function createProductRow(product) {
     }
 
     const imageUrl = product.imagens && product.imagens.length > 0
-        ? `${API_BASE_URL}/${product.imagens[0].url}`
-        : 'https://placehold.co/60x60/eee/ccc?text=N/A';
+        ? product.imagens[0].url // Remova o `${API_BASE_URL}/` daqui
+        : 'https://placehold.co/300x300/eee/ccc?text=Sem+Imagem';
+
 
     row.innerHTML = `
         <td>
@@ -75,7 +76,6 @@ function createProductRow(product) {
                 <span>${product.nome}</span>
             </div>
         </td>
-        <td>${product.sku || 'N/A'}</td>
         <td><span class="stock ${stockStatusClass}">${product.quantidade_estoque} em estoque</span></td>
         <td>${parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
         <td>
