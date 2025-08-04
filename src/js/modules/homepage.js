@@ -40,7 +40,7 @@ function createProductCard(product) {
     card.className = 'product-card';
 
     const imageUrl = product.imagens && product.imagens.length > 0
-        ? `${API_BASE_URL}/${product.imagens[0].url}`
+        ? product.imagens[0].url
         : 'https://placehold.co/300x300/eee/ccc?text=Sem+Imagem';
     
     const price = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });

@@ -24,11 +24,11 @@ async function loadOrderDetails() {
 
     try {
         const order = await fetchWithAuth(`/api/pedidos/${orderId}`);
-        
+
         // --- Preenche os elementos da página ---
         document.getElementById('order-title').textContent = `Detalhes do Pedido #${order.id}`;
         document.getElementById('order-status').textContent = order.status.replace('_', ' ').toUpperCase();
-        
+
         // Preenche o endereço
         const address = order.endereco_entrega;
         const addressContainer = document.getElementById('shipping-address');
@@ -48,9 +48,9 @@ async function loadOrderDetails() {
         order.itens.forEach(item => {
             const produto = item.produto;
             const imageUrl = produto.imagens && produto.imagens.length > 0
-                ? `${API_BASE_URL}/${produto.imagens[0].url}`
-                : 'https://placehold.co/64x64/eee/ccc?text=N/A';
-            
+                ? produto.imagens[0].url
+                : 'https://placehold.co/300x300/eee/ccc?text=Sem+Imagem';
+
             const itemHTML = `
                 <div class="summary-item">
                     <img src="${imageUrl}" alt="${produto.nome}">

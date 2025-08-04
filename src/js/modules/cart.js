@@ -36,7 +36,7 @@ async function loadCart() {
             if (checkoutButton) checkoutButton.classList.add('disabled'); // Desabilita o botão de checkout
             return;
         }
-        
+
         if (checkoutButton) checkoutButton.classList.remove('disabled'); // Habilita o botão de checkout
 
         cartData.itens.forEach(item => {
@@ -61,9 +61,10 @@ async function loadCart() {
 function createCartItemElement(item) {
     const produto = item.produto;
     const itemTotalPrice = item.preco_unitario * item.quantidade;
+
     const imageUrl = produto.imagens && produto.imagens.length > 0
-        ? `${API_BASE_URL}/${produto.imagens[0].url}`
-        : 'https://placehold.co/80x80/eee/ccc?text=Produto';
+        ? product.imagens[0].url
+        : 'https://placehold.co/300x300/eee/ccc?text=Sem+Imagem';
 
     const itemElement = document.createElement('div');
     itemElement.className = 'cart-item';

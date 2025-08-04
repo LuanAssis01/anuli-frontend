@@ -34,8 +34,9 @@ async function fetchAndRenderSearchResults() {
         products.forEach(product => {
             const card = document.createElement('div');
             card.className = 'product-card';
-            const imageUrl = product.imagens && product.imagens.length > 0 ? `${API_BASE_URL}/${product.imagens[0].url}` : 'https://via.placeholder.com/300x300.png?text=Sem+Imagem';
-            const price = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            const imageUrl = product.imagens && product.imagens.length > 0
+                ? product.imagens[0].url
+                : 'https://placehold.co/300x300/eee/ccc?text=Sem+Imagem'; const price = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             card.innerHTML = `
                 <div class="card-image"><a href="detalhes_produto.html?id=${product.id}"><img src="${imageUrl}" alt="${product.nome}"></a></div>
                 <div class="card-content">
