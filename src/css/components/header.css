@@ -1,10 +1,11 @@
+/* --- Header Principal --- */
 .main-header {
   background-color: var(--branco-fundo);
-  padding: 16px 0;
   border-bottom: 1px solid #eee;
-  position: sticky; /* Faz o header ficar fixo no topo */
-  top: 0;
-  z-index: 1000; /* Garante que ele fique acima de outros conteúdos */
+  position: sticky;
+  top: 0;          
+  z-index: 1000;   
+  padding: 1px 0;  
 }
 
 .header-container {
@@ -13,24 +14,25 @@
   align-items: center;
 }
 
-.header-logo-text {
-  font-size: 28px;
-  font-weight: 1600; /* Deixa a fonte bem marcada */
-  font: var(--fonte-logo);
-  color: var(--azul-principal); /* Usa a cor principal da sua marca */
-  text-decoration: none;
-  letter-spacing: 3px; /* Um pequeno espaçamento entre as letras dá um toque de design */
+.header-logo img {
+  display: block;     
+  height:180px;      
+  width: auto;
 }
 
 /* --- Navegação Principal (Desktop) --- */
 .main-nav ul {
+  margin: 0; /* Boa prática para zerar margens de listas */
+  padding: 0; /* Boa prática para zerar paddings de listas */
+  list-style: none; /* Remove os marcadores da lista */
   display: flex;
-  gap: 32px; /* Espaçamento entre os links */
+  gap: 32px;
 }
 
 .main-nav a {
   font-weight: 500;
   color: var(--preto-texto);
+  text-decoration: none; /* Remove o sublinhado padrão */
   position: relative;
   padding-bottom: 4px;
 }
@@ -50,7 +52,6 @@
   width: 100%;
 }
 
-
 /* --- Ícones de Ação --- */
 .header-actions {
   display: flex;
@@ -67,27 +68,20 @@
   color: var(--azul-principal);
 }
 
-
-/* --- Botão do Menu Mobile --- */
+/* --- Media Queries (Responsividade) --- */
 .mobile-nav-toggle {
-  display: none; /* Escondido por padrão no desktop */
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
 }
 
-
-/* =================================
-   Responsividade (Mobile-First)
-   ================================= */
-
-/* Para telas menores que 768px (tablets e celulares) */
 @media (max-width: 768px) {
   .main-nav {
-    display: none; /* Esconde a navegação principal */
+    display: none;
   }
 
   .mobile-nav-toggle {
-    display: block; /* Mostra o botão do menu "hambúrguer" */
+    display: block;
   }
 }
