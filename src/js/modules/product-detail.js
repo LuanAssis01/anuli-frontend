@@ -33,7 +33,7 @@ async function initProductDetailPage() {
         // --- Busca e Renderiza os Dados do Produto ---
         const response = await fetch(`${API_BASE_URL}/api/produtos/${productId}`);
         if (!response.ok) throw new Error('Produto não encontrado.');
-        
+
         const product = await response.json();
 
         document.title = `${product.nome} - Anuli Acessórios`;
@@ -41,7 +41,7 @@ async function initProductDetailPage() {
         if (titleElement) titleElement.textContent = product.nome;
         if (priceElement) priceElement.textContent = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         if (descriptionElement) descriptionElement.textContent = product.descricao;
-        
+
         // --- Preenche a Galeria de Imagens ---
         if (product.imagens && product.imagens.length > 0) {
             const firstImageUrl = product.imagens[0].url;
@@ -60,7 +60,7 @@ async function initProductDetailPage() {
                     if (image.url === firstImageUrl) {
                         thumb.classList.add('active');
                     }
-                    
+
                     thumb.addEventListener('click', () => {
                         if (mainImage) mainImage.src = thumb.src;
                         const currentActive = document.querySelector('.thumbnail.active');
@@ -111,31 +111,38 @@ async function initProductDetailPage() {
 
         // --- Lógica para o Botão WhatsApp ---
         if (whatsappContactBtn) {
+            // A variável 'product' já está disponível aqui de quando buscamos os detalhes
             whatsappContactBtn.addEventListener('click', async () => {
                 try {
+                    // 1. Busca as informações de contato do site (igual no checkout.js)
                     const contactResponse = await fetch(`${API_BASE_URL}/api/site/contact-info`);
-                    if (!contactResponse.ok) throw new Error('Não foi possível obter o contacto da loja.');
-                    
+                    if (!contactResponse.ok) {
+                        throw new Error('Não foi possível obter os dados de contato da loja.');
+                    }
                     const contactInfo = await contactResponse.json();
-                    const whatsappBaseLink = contactInfo.whatsappLink;
-                    
+
+                    // Garante que temos um número de WhatsApp para usar
+                    if (!contactInfo.whatsappNumber) {
+                        throw new Error('O número de WhatsApp da loja não foi configurado.');
+                    }
+
+                    // 2. Monta a mensagem específica para ESTE produto
                     const productPrice = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                    const productUrl = window.location.href; 
-                    
-                    // AJUSTE 3: Declarando a variável message
-                    let message = `Olá! Tenho uma dúvida sobre o seguinte produto:\n\n`;
+                    const productUrl = window.location.href; // URL da página atual do produto
+
+                    let message = `Olá! Tenho uma dúvida sobre o produto abaixo:\n\n`;
                     message += `*Produto:* ${product.nome}\n`;
                     message += `*Preço:* ${productPrice}\n`;
-                    message += `*Link:* ${productUrl}\n\n`;
-                    
-                    const separator = whatsappBaseLink.includes('?') ? '&' : '?';
-                    const whatsappURL = `${whatsappBaseLink}${separator}text=${encodeURIComponent(message)}`;
-                    
+                    message += `*Link:* ${productUrl}`;
+
+                    // 3. Constrói o link do WhatsApp e abre em uma nova aba
+                    const whatsappURL = `https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(message)}`;
+
                     window.open(whatsappURL, '_blank');
 
                 } catch (error) {
                     console.error('Erro ao gerar link do WhatsApp:', error);
-                    alert('Não foi possível abrir o contacto do WhatsApp. Tente novamente mais tarde.');
+                    alert(error.message || 'Não foi possível abrir o contato do WhatsApp. Tente novamente mais tarde.');
                 }
             });
         }
@@ -149,7 +156,7 @@ async function initProductDetailPage() {
     const minusBtn = document.querySelector('.quantity-selector button:first-child');
     const plusBtn = document.querySelector('.quantity-selector button:last-child');
 
-    if(quantityInput && minusBtn && plusBtn) {
+    if (quantityInput && minusBtn && plusBtn) {
         minusBtn.addEventListener('click', () => {
             let currentValue = parseInt(quantityInput.value);
             if (currentValue > 1) quantityInput.value = currentValue - 1;
@@ -168,7 +175,7 @@ function setupAccordion() {
         const header = item.querySelector('.accordion-header');
         header.addEventListener('click', () => {
             const content = item.querySelector('.accordion-content');
-            
+
             // Alterna a classe 'active' no item
             item.classList.toggle('active');
 

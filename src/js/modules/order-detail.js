@@ -4,9 +4,6 @@ import { fetchWithAuth } from '../apiService.js';
 import { authManager } from './authManager.js';
 import { API_BASE_URL } from '../apiConfig.js';
 
-/**
- * Função principal para carregar os detalhes de um pedido específico.
- */
 async function loadOrderDetails() {
     if (!authManager.isLoggedIn()) {
         window.location.href = '/src/html/auth/login.html';
@@ -24,8 +21,6 @@ async function loadOrderDetails() {
 
     try {
         const order = await fetchWithAuth(`/api/pedidos/${orderId}`);
-
-        // --- Preenche os elementos da página ---
         document.getElementById('order-title').textContent = `Detalhes do Pedido #${order.id}`;
         document.getElementById('order-status').textContent = order.status.replace('_', ' ').toUpperCase();
 
@@ -42,9 +37,9 @@ async function loadOrderDetails() {
             `;
         }
 
-        // Preenche os itens do pedido
         const itemsContainer = document.getElementById('order-summary-items');
-        itemsContainer.innerHTML = '';
+        let allItemsHTML = ''; 
+
         order.itens.forEach(item => {
             const produto = item.produto;
             const imageUrl = produto.imagens && produto.imagens.length > 0
@@ -52,21 +47,22 @@ async function loadOrderDetails() {
                 : 'https://placehold.co/300x300/eee/ccc?text=Sem+Imagem';
 
             const itemHTML = `
-                <div class="summary-item">
-                    <img src="${imageUrl}" alt="${produto.nome}">
-                    <div class="summary-item-details">
-                        <div>
-                            <p class="item-title">${produto.nome}</p>
-                            <p>Qtd: ${item.quantidade}</p>
-                        </div>
-                        <p class="item-price">${parseFloat(item.preco_unitario * item.quantidade).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                    </div>
+        <div class="summary-item">
+            <img src="${imageUrl}" alt="${produto.nome}">
+            <div class="summary-item-details">
+                <div>
+                    <p class="item-title">${produto.nome}</p>
+                    <p>Qtd: ${item.quantidade}</p>
                 </div>
-            `;
-            itemsContainer.innerHTML += itemHTML;
+                <p class="item-price">${parseFloat(item.preco_unitario * item.quantidade).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+            </div>
+        </div>
+    `;
+            allItemsHTML += itemHTML; 
         });
 
-        // Preenche os totais
+        itemsContainer.innerHTML = allItemsHTML;
+
         const total = parseFloat(order.valor_total);
         document.getElementById('summary-subtotal').textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         document.getElementById('summary-total').textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
