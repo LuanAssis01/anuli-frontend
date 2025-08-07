@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const summaryItemsContainer = document.getElementById('checkout-summary-items');
     const totalValueElement = document.getElementById('checkout-total-value');
     const userNameInput = document.getElementById('checkout-name');
-    
+
     // --- Elementos do Novo Formulário de Endereço ---
     const addNewAddressBtn = document.getElementById('add-new-address-btn');
     const newAddressFormContainer = document.getElementById('new-address-form-container');
@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const produto = item.produto;
             const itemTotal = item.preco_unitario * item.quantidade;
             const imageUrl = produto.imagens && produto.imagens.length > 0
-                ? `${API_BASE_URL}/${produto.imagens[0].url}`
-                : 'https://placehold.co/60x60/eee/ccc?text=Produto';
+                ? produto.imagens[0].url
+                : 'https://placehold.co/300x300/eee/ccc?text=Sem+Imagem';
 
             const itemHTML = `
                 <div class="summary-item">
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     `;
                     savedAddressesContainer.appendChild(addressElement);
                 });
-                
+
                 const principal = addresses.find(a => a.endereco_principal);
                 if (principal) {
                     selectedAddressId = principal.id;
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             savedAddressesContainer.innerHTML = '<p>Não foi possível carregar seus endereços.</p>';
         }
     }
-    
+
     /**
      * Lida com o envio do pedido para o backend.
      */
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // ⭐ ALTERAÇÃO: Busca o NÚMERO de WhatsApp do admin no backend ⭐
             const contactResponse = await fetch(`${API_BASE_URL}/api/site/contact-info`);
             if (!contactResponse.ok) throw new Error('Não foi possível obter o contato da loja.');
-            
+
             const contactInfo = await contactResponse.json();
             const whatsappNumber = contactInfo.whatsappNumber; // Usa a nova propriedade
 
@@ -152,15 +152,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 message += `- ${item.produto.nome} (x${item.quantidade})\n`;
             });
             message += `\n*Total:* ${total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n\n`;
-            
+
             if (selectedAddress) {
                 message += `*Endereço de Entrega:*\n${selectedAddress.rua}, ${selectedAddress.numero}\n${selectedAddress.cidade}, ${selectedAddress.estado} - CEP: ${selectedAddress.cep}\n\n`;
             }
             message += `Aguardo as instruções para o pagamento. Obrigado!`;
-            
+
             // ⭐ ALTERAÇÃO: Constrói o URL do WhatsApp usando o número de telefone ⭐
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            
+
             // Redireciona o utilizador para o WhatsApp
             window.location.href = whatsappURL;
 
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function handleNewAddressSubmit(event) {
         event.preventDefault();
         const errorElement = document.getElementById('new-address-error');
-        if(errorElement) errorElement.textContent = '';
+        if (errorElement) errorElement.textContent = '';
 
         const payload = {
             titulo: document.getElementById('new-titulo').value,
@@ -195,13 +195,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 method: 'POST',
                 body: payload
             });
-            
+
             newAddressFormContainer.classList.add('hidden');
             addNewAddressBtn.style.display = 'block';
             await loadAddresses();
 
         } catch (error) {
-            if(errorElement) errorElement.textContent = error.message;
+            if (errorElement) errorElement.textContent = error.message;
             console.error('Erro ao salvar novo endereço:', error);
         }
     }
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             renderSummary();
             await loadAddresses();
-            
+
             // --- Adiciona os Event Listeners ---
             submitOrderBtn.addEventListener('click', submitOrder);
             if (addNewAddressBtn) {

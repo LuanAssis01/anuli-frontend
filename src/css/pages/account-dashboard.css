@@ -1,7 +1,8 @@
 /* =================================
-   Página: Layout da Área do Cliente
+   Página: Minha Conta (CSS Completo com todas as seções)
    ================================= */
 
+/* --- Layout Principal --- */
 .account-page-container {
     padding-top: 40px;
     padding-bottom: 60px;
@@ -17,15 +18,25 @@
 .account-sidebar {
     border: 1px solid #eee;
     border-radius: var(--raio-borda);
-    padding: 20px;
+    padding: 15px;
     align-self: start;
+    position: sticky;
+    top: 100px;
+}
+
+.account-sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .account-sidebar ul li a {
     display: block;
-    padding: 15px;
+    padding: 14px 18px;
     border-radius: 6px;
     font-weight: 500;
+    text-decoration: none;
+    color: var(--preto-texto);
     transition: all 0.2s ease;
     margin-bottom: 5px;
 }
@@ -40,127 +51,136 @@
     color: var(--branco-fundo);
 }
 
-/* --- Conteúdo Principal (Direita) --- */
+/* --- Conteúdo Principal (Estilo Base) --- */
 .account-content h2 {
-    font-size: 28px;
-    margin-bottom: 30px;
+    font-size: 26px;
+    margin-bottom: 25px;
     border-bottom: 1px solid #eee;
     padding-bottom: 15px;
 }
 
-/* =================================
-   Conteúdo: Tabela de Pedidos
-   ================================= */
-
-.orders-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.orders-table th,
-.orders-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.orders-table th {
-    font-weight: 600;
-    font-size: 14px;
-    text-transform: uppercase;
-}
-
-.status {
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-}
-
-.status-entregue { background-color: var(--sucesso); }
-.status-enviado { background-color: var(--amarelo-destaque); color: var(--preto-texto); }
-.status-cancelado { background-color: var(--erro); }
-
-.btn-sm {
-    padding: 8px 12px;
-    font-size: 14px;
-}
-
-/* =================================
-   Conteúdo: Meus Endereços
-   ================================= */
-   
 .content-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
+
 .content-header h2 {
     margin-bottom: 0;
     border-bottom: none;
     padding-bottom: 0;
 }
 
+
+/* =================================
+   ⭐ SEÇÃO: MEUS ENDEREÇOS ⭐
+   ================================= */
+
 .addresses-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    gap: 25px;
 }
 
 .address-card {
-    border: 1px solid #eee;
-    padding: 20px;
+    border: 1px solid #dee2e6;
     border-radius: var(--raio-borda);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .address-card h4 {
     font-size: 18px;
+    margin-top: 0;
     margin-bottom: 10px;
 }
 
 .address-card p {
     line-height: 1.6;
     color: #555;
+    margin: 0 0 5px 0;
+    flex-grow: 1;
+}
+
+/* flex-grow faz o card ter a mesma altura */
+.address-card .badge {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--sucesso);
+    margin-left: 8px;
 }
 
 .address-actions {
-    margin-top: 20px;
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
     border-top: 1px solid #eee;
-    padding-top: 15px;
+    flex-wrap: wrap;
 }
 
-.address-actions a {
+.address-actions button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 13px;
     font-weight: 500;
-    font-size: 14px;
-    margin-right: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
 }
 
-.action-link-edit { color: var(--azul-principal); }
-.action-link-delete { color: var(--erro); }
+.address-actions button:hover {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+}
+
+.address-actions .action-link-delete {
+    background-color: #fff5f5;
+    border-color: #f5c6cb;
+    color: #c53030;
+}
+
+.address-actions .action-link-delete:hover {
+    background-color: #c53030;
+    border-color: #c53030;
+    color: #fff;
+}
+
+.address-actions .action-link-principal {
+    background-color: #f0f9ff;
+    border-color: #bee3f8;
+    color: #2c5282;
+}
+
+.address-actions .action-link-principal:hover {
+    background-color: #2c5282;
+    border-color: #2c5282;
+    color: #fff;
+}
+
 
 /* =================================
-   Conteúdo: Dados Pessoais (Formulário)
+   ⭐ SEÇÃO: FORMULÁRIOS (DADOS PESSOAIS E CADASTRAR ENDEREÇO) ⭐
    ================================= */
 
 .account-form fieldset {
-    border: 1px solid #eee;
-    padding: 20px 20px 10px 20px;
+    border: 1px solid #dee2e6;
+    padding: 25px;
     border-radius: var(--raio-borda);
     margin-bottom: 30px;
+    background-color: #fff;
+    /* Fundo branco para o formulário */
 }
 
 .account-form legend {
     font-size: 18px;
     font-weight: 600;
     padding: 0 10px;
-}
-
-.form-description {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 20px;
 }
 
 .account-form .form-group {
@@ -175,143 +195,106 @@
 
 .account-form .form-group input {
     width: 100%;
-    max-width: 500px;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: var(--raio-borda);
+    transition: all 0.2s ease;
 }
 
-.account-form .btn {
-    padding-left: 30px;
-    padding-right: 30px;
+.account-form .form-group input:focus {
+    border-color: var(--azul-principal);
+    box-shadow: 0 0 0 3px rgba(3, 45, 101, 0.1);
+    outline: none;
+}
+
+/* Grid específico para o formulário de endereço */
+.account-form .address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Duas colunas */
+    gap: 20px;
+}
+
+/* Helper para campos que ocupam a largura total */
+.account-form .form-group.span-full {
+    grid-column: 1 / -1;
+}
+
+.account-form .form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Estilos para o formulário de Dados Pessoais (largura máxima para os inputs) */
+#personal-data-form .form-group input {
+    max-width: 500px;
 }
 
 /* =================================
-   Conteúdo: Mensagens de Formulário
+   RESPONSIVIDADE (JÁ INCLUI AS NOVAS SEÇÕES)
    ================================= */
-   
-#form-message {
-    text-align: left;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
 
-.success-text { color: var(--sucesso); }
-.error-text { color: var(--erro); }
-
-/* src/css/pages/account-dashboard.css */
-
-/* --- ESTILO GERAL PARA OS BOTÕES DE AÇÃO NOS CARDS --- */
-.address-actions {
-    display: flex;
-    gap: 8px; /* Espaçamento entre os botões */
-    margin-top: 16px;
-    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas pequenas */
-}
-
-/* Estilo base para todos os botões de ação */
-.address-actions button {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ddd; /* Borda sutil */
-    background-color: #f9f9f9; /* Fundo quase branco */
-    color: #333; /* Cor do texto escura */
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease; /* Transição suave para hover */
-    font-family: 'Inter', sans-serif; /* Garante a mesma fonte do site */
-}
-
-/* Efeito de hover para os botões padrão */
-.address-actions button:hover {
-    background-color: #f0f0f0;
-    border-color: #ccc;
-}
-
-/* --- ESTILOS ESPECÍFICOS --- */
-
-/* Botão de Excluir (destaque de perigo) */
-.address-actions .action-link-delete {
-    background-color: #fff5f5; /* Fundo vermelho bem claro */
-    border-color: #f5c6cb; /* Borda vermelha clara */
-    color: #c53030; /* Texto vermelho escuro */
-}
-
-.address-actions .action-link-delete:hover {
-    background-color: #c53030; /* Fundo vermelho escuro no hover */
-    border-color: #c53030;
-    color: #fff; /* Texto branco no hover */
-}
-
-/* Botão "Definir como Principal" (destaque sutil) */
-.address-actions .action-link-principal {
-    background-color: #f0f9ff; /* Fundo azul bem claro */
-    border-color: #bee3f8; /* Borda azul clara */
-    color: #2c5282; /* Texto azul escuro */
-}
-
-.address-actions .action-link-principal:hover {
-    background-color: #2c5282; /* Fundo azul escuro no hover */
-    border-color: #2c5282;
-    color: #fff; /* Texto branco no hover */
-}
-
-/* --- ESTILO PARA O BOTÃO PRINCIPAL DA PÁGINA (Adicionar Endereço) --- */
-.content-header .btn-primary {
-    background-color: #001f3f; /* Azul marinho escuro, como no seu design */
-    color: white;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-}
-
-.content-header .btn-primary:hover {
-    background-color: #003366; /* Um tom de azul um pouco mais claro */
-}
-
-
-/* --- Responsividade --- */
 @media (max-width: 900px) {
     .account-layout {
         grid-template-columns: 1fr;
+        gap: 0;
     }
+
     .account-sidebar {
+        position: static;
+        border: none;
         margin-bottom: 30px;
+        border-bottom: 1px solid #dee2e6;
     }
+
     .account-sidebar ul {
         display: flex;
         overflow-x: auto;
+        padding-bottom: 0;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
-     .account-sidebar ul li a {
+
+    .account-sidebar ul::-webkit-scrollbar {
+        display: none;
+    }
+
+    .account-sidebar ul li a {
         flex-shrink: 0;
+        padding: 15px 20px;
+        margin-bottom: 0;
+        border-radius: 0;
+        background-color: transparent;
+        color: #555;
+        border-bottom: 3px solid transparent;
+        text-align: center;
+    }
+
+    .account-sidebar ul li a:hover {
+        background-color: #f8f9fa;
+        color: #000;
+    }
+
+    .account-sidebar ul li a.active {
+        color: var(--azul-principal);
+        font-weight: 600;
+        background-color: transparent;
+        border-bottom-color: var(--azul-principal);
     }
 }
 
 @media (max-width: 768px) {
-    .orders-table thead {
-        display: none;
+    .account-page-container {
+        padding-top: 20px;
+        padding-bottom: 40px;
     }
-    .orders-table tr {
-        display: block;
-        margin-bottom: 20px;
-        border: 1px solid #eee;
-        border-radius: var(--raio-borda);
+
+    .account-content h2 {
+        font-size: 22px;
     }
-    .orders-table td {
-        display: block;
-        text-align: right;
-        border-bottom: 1px dotted #ccc;
-    }
-    .orders-table td:last-child {
-        border-bottom: none;
-    }
-    .orders-table td::before {
-        content: attr(data-label);
-        float: left;
-        font-weight: 600;
+
+    /* Grid do formulário de endereço vira coluna única */
+    .account-form .address-grid {
+        grid-template-columns: 1fr;
     }
 }

@@ -9,22 +9,13 @@ import { fetchWithAuth } from '../apiService.js';
 function updateHeader() {
   const userActionsLoggedOut = document.getElementById('user-actions-logged-out');
   const userActionsLoggedIn = document.getElementById('user-actions-logged-in');
-  const logoutButton = document.getElementById('logout-button');
 
-  // Se os elementos não existirem na página, não faz nada.
   if (!userActionsLoggedOut || !userActionsLoggedIn) return;
 
   if (authManager.isLoggedIn()) {
-    // Usuário está logado: mostra as ações de logado e esconde as de deslogado.
     userActionsLoggedOut.style.display = 'none';
-    userActionsLoggedIn.style.display = 'flex'; // ou 'block', dependendo do seu CSS
-
-    // Adiciona o evento de clique ao botão de sair, se ele existir
-    if (logoutButton) {
-      logoutButton.addEventListener('click', handleLogout);
-    }
+    userActionsLoggedIn.style.display = 'flex';
   } else {
-    // Usuário não está logado: faz o oposto.
     userActionsLoggedOut.style.display = 'flex';
     userActionsLoggedIn.style.display = 'none';
   }
@@ -36,18 +27,48 @@ function updateHeader() {
 async function handleLogout(event) {
   event.preventDefault();
   try {
-    // Chama a API para que o backend limpe o cookie HttpOnly
     await fetchWithAuth('/api/users/logout', { method: 'POST' });
   } catch (error) {
     console.error('Erro ao fazer logout no backend:', error);
   } finally {
-    // Limpa os dados do usuário do sessionStorage
     authManager.logout();
-    // ⭐ CAMINHO CORRIGIDO POR VOCÊ ⭐
-    // Redireciona para o caminho correto da página de login
     window.location.href = '/src/html/auth/login.html';
   }
 }
 
-// Executa a função para atualizar o cabeçalho assim que o conteúdo da página for carregado
-document.addEventListener('DOMContentLoaded', updateHeader);
+/**
+ * Configura o menu de navegação mobile.
+ */
+function setupMobileMenu() {
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    const mainNav = document.querySelector('.main-nav');
+
+    if (mobileNavToggle && mainNav) {
+        mobileNavToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+        });
+    }
+}
+
+/**
+ * Adiciona os event listeners globais que só precisam ser configurados uma vez.
+ */
+function initializeGlobalListeners() {
+    // Delegação de Evento: o listener fica no container pai
+    const headerActions = document.querySelector('.header-actions');
+    if (headerActions) {
+        headerActions.addEventListener('click', (event) => {
+            // Verifica se o elemento clicado (ou um de seus pais) é o botão de logout
+            if (event.target.closest('#logout-button')) {
+                handleLogout(event);
+            }
+        });
+    }
+}
+
+// Executa todas as funções globais necessárias quando a página for carregada
+document.addEventListener('DOMContentLoaded', () => {
+  updateHeader();
+  setupMobileMenu();
+  initializeGlobalListeners(); // <-- Nova função que cuida dos listeners
+});

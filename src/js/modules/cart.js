@@ -63,7 +63,7 @@ function createCartItemElement(item) {
     const itemTotalPrice = item.preco_unitario * item.quantidade;
 
     const imageUrl = produto.imagens && produto.imagens.length > 0
-        ? product.imagens[0].url
+        ? produto.imagens[0].url
         : 'https://placehold.co/300x300/eee/ccc?text=Sem+Imagem';
 
     const itemElement = document.createElement('div');
