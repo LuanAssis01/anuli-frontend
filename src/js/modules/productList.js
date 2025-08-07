@@ -1,5 +1,4 @@
 import { API_BASE_URL } from '../apiConfig.js';
-// ⭐ 1. IMPORTS ADICIONADOS (Necessários para login e chamadas da API) ⭐
 import { fetchWithAuth } from '../apiService.js';
 import { authManager } from './authManager.js';
 
@@ -74,13 +73,11 @@ function createProductCard(product) {
 }
 
 /**
- * ⭐ 2. FUNÇÃO ADICIONADA: Lida com o clique no botão "Adicionar ao Carrinho". ⭐
+ * Lida com o clique no botão "Adicionar ao Carrinho".
  */
 async function handleAddToCart(event) {
-    // Só continua se o elemento clicado for o botão de adicionar ao carrinho
     if (!event.target.matches('.add-to-cart-btn')) return;
 
-    // Verifica se o usuário está logado
     if (!authManager.isLoggedIn()) {
         alert('Você precisa estar logado para adicionar produtos ao carrinho.');
         window.location.href = '/src/html/auth/login.html';
@@ -90,17 +87,15 @@ async function handleAddToCart(event) {
     const button = event.target;
     const productId = parseInt(button.dataset.productId);
     
-    // Feedback visual para o usuário
     button.textContent = 'A adicionar...';
     button.disabled = true;
 
     try {
-        // Envia a requisição para a API
         await fetchWithAuth('/api/carrinho/items', {
             method: 'POST',
             body: {
                 produto_id: productId,
-                quantidade: 1 // Adiciona sempre 1 unidade pela lista
+                quantidade: 1
             }
         });
 
@@ -120,6 +115,7 @@ async function handleAddToCart(event) {
 
 
 /**
+ * ⭐ LÓGICA CORRIGIDA E COMPLETA AQUI ⭐
  * Configura todos os event listeners para os filtros e ordenação.
  */
 function setupFiltersAndSorting() {
@@ -127,20 +123,70 @@ function setupFiltersAndSorting() {
     const priceFilterBtn = document.querySelector('#price-filter-btn');
     const sortSelect = document.getElementById('sort');
     const clearFiltersBtn = document.getElementById('clear-filters-btn');
-    // ⭐ 3. SELETOR ADICIONADO: Seleciona o container dos produtos ⭐
     const productGrid = document.querySelector('.product-grid');
 
-    // ... (funções applyFilters e updateActiveCategory continuam iguais) ...
-    function applyFilters() { /* ... */ }
-    function updateActiveCategory() { /* ... */ }
+    // Função que aplica os filtros e atualiza a interface
+    function applyFilters() {
+        fetchAndRenderProducts(); // Busca e renderiza os produtos com a nova query
+        updateActiveCategory();   // Atualiza qual categoria está com a classe 'active'
+    }
 
-    // ... (listeners de filtros continuam iguais) ...
-    categoryLinks.forEach(link => { /* ... */ });
-    if (priceFilterBtn) { /* ... */ }
-    if (sortSelect) { /* ... */ }
-    if (clearFiltersBtn) { /* ... */ }
+    // Adiciona a classe 'active' no link da categoria selecionada
+    function updateActiveCategory() {
+        categoryLinks.forEach(link => {
+            if (link.dataset.categoryId === currentQuery.categoria_id) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    // 1. FILTRO DE CATEGORIA
+    categoryLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentQuery.categoria_id = link.dataset.categoryId;
+            applyFilters();
+        });
+    });
+
+    // 2. FILTRO DE PREÇO
+    if (priceFilterBtn) {
+        priceFilterBtn.addEventListener('click', () => {
+            const minPrice = document.getElementById('min-price').value;
+            const maxPrice = document.getElementById('max-price').value;
+            
+            // Limpa filtros de preço antigos antes de adicionar novos
+            delete currentQuery.preco_min;
+            delete currentQuery.preco_max;
+
+            if (minPrice) currentQuery.preco_min = minPrice;
+            if (maxPrice) currentQuery.preco_max = maxPrice;
+            applyFilters();
+        });
+    }
+
+    // 3. ORDENAÇÃO
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            currentQuery.ordenar_por = sortSelect.value;
+            applyFilters();
+        });
+    }
+
+    // 4. LIMPAR FILTROS
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', () => {
+            currentQuery = {};
+            document.getElementById('min-price').value = '';
+            document.getElementById('max-price').value = '';
+            if (sortSelect) sortSelect.value = 'relevance';
+            applyFilters();
+        });
+    }
     
-    // ⭐ 4. LISTENER ADICIONADO: Escuta por cliques no container dos produtos ⭐
+    // Listener para o botão "Adicionar ao Carrinho"
     if (productGrid) {
         productGrid.addEventListener('click', handleAddToCart);
     }
