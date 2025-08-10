@@ -1,54 +1,67 @@
+/* --- Título Padrão das Seções --- */
 .section-title {
     text-align: center;
     font-size: 32px;
+    font-weight: 600;
     margin-bottom: 40px;
+    color: #333;
 }
+
 
 /* --- 1. Hero Section --- */
 .hero-section {
-    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://via.placeholder.com/1920x800.png?text=Banner+de+Acessórios');
+    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+        url('https://images.pexels.com/photos/14588663/pexels-photo-14588663.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
     background-size: cover;
-    background-position: center;
+    background-position: center 70%;
     color: var(--branco-fundo);
-    padding: 150px 0;
+    padding: 160px 0;
     text-align: center;
 }
-
 .hero-content h1 {
-    font-size: 56px;
+    font-size: clamp(36px, 5vw, 52px);
     font-weight: 700;
     margin-bottom: 16px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.hero-content p {
+    font-size: clamp(18px, 2vw, 20px);
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.hero-content p {
-    font-size: 20px;
-    margin-bottom: 30px;
-}
 
 /* --- 2. Seção de Categorias --- */
 .categories-section {
-    padding: 60px 0;
-    background-color: var(--cinza-claro);
+    padding: 80px 0;
+    background-color: #f8f9fa;
 }
 
 .categories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    /* ⭐ MUDANÇA PRINCIPAL: Grade de 6 colunas para caber em uma linha ⭐ */
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px; /* Espaçamento ajustado */
 }
 
 .category-card {
     position: relative;
     overflow: hidden;
     border-radius: var(--raio-borda);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: block;
+    text-decoration: none;
 }
 
 .category-card img {
     width: 100%;
+    /* ⭐ ALTURA AJUSTADA para a nova largura da coluna ⭐ */
+    height: 220px;
+    object-fit: cover;
     transition: transform 0.4s ease;
-    display: block;
 }
-
 .category-card:hover img {
     transform: scale(1.1);
 }
@@ -58,43 +71,47 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    background: linear-gradient(transparent, rgba(0,0,0,0.75));
     color: var(--branco-fundo);
-    padding: 30px 20px 20px 20px;
-    font-size: 24px;
-    font-weight: 700;
+    padding: 30px 10px 15px 10px;
+    /* ⭐ TAMANHO DA FONTE AJUSTADO ⭐ */
+    font-size: 16px;
+    font-weight: 600;
     transition: all 0.3s ease;
+    text-align: center;
 }
 
-.category-card:hover .category-name {
-    background: linear-gradient(transparent, rgba(0,0,0,0.85));
-}
 
 /* --- 3. Seção de Produtos em Destaque --- */
 .featured-products-section {
-    padding: 60px 0;
+    padding: 80px 0;
 }
 
-/* Layout da grade de produtos na homepage */
+/* ⭐ 1. LAYOUT DA GRADE COM 4 COLUNAS E RESPONSIVIDADE ⭐ */
 .featured-products-section .product-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px; /* Aumentei um pouco o espaçamento */
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas em telas grandes */
+    gap: 25px;
 }
 
-/* Estilos refinados para os cards de produto na homepage */
+/* ⭐ 2. ESTILO REFINADO PARA O CARD DO PRODUTO ⭐ */
 .featured-products-section .product-card {
     background-color: var(--branco-fundo);
-    border: 1px solid #f0f0f0;
+    border: 1px solid #f0f0f0; /* Borda bem sutil */
     border-radius: var(--raio-borda);
     overflow: hidden;
-    text-align: center;
+    text-align: left; /* Alinha o texto à esquerda */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Efeito de elevação ao passar o mouse */
 .featured-products-section .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.featured-products-section .card-image {
+    overflow: hidden; /* Garante que o zoom da imagem não ultrapasse a borda */
 }
 
 .featured-products-section .card-image img {
@@ -104,44 +121,84 @@
     transition: transform 0.4s ease;
 }
 
+/* Efeito de zoom na imagem ao passar o mouse no card */
 .featured-products-section .product-card:hover .card-image img {
     transform: scale(1.05);
 }
 
 .featured-products-section .card-content {
-    padding: 15px;
-    /* Adicionamos padding inferior para o botão ter espaço para aparecer */
-    padding-bottom: 60px; 
+    padding: 20px;
     position: relative;
 }
 
+.featured-products-section .card-info-wrapper {
+    /* Deixa o botão com espaço para aparecer sem empurrar o conteúdo */
+    padding-bottom: 50px; 
+}
+
+.featured-products-section .card-category {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.featured-products-section .card-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 5px 0 8px 0;
+}
+.featured-products-section .card-title a {
+    color: var(--preto-texto);
+    text-decoration: none;
+}
+
+.featured-products-section .card-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--azul-principal);
+}
+
+/* ⭐ 3. EFEITO DE APARECER PARA O BOTÃO "ADICIONAR AO CARRINHO" ⭐ */
 .featured-products-section .add-to-cart-btn {
     position: absolute;
-    bottom: 15px; /* Posiciona na parte de baixo do card */
-    left: 15px;
-    right: 15px;
-    width: calc(100% - 30px); /* Ocupa a largura com padding */
+    bottom: 20px; /* Posiciona na parte de baixo do card */
+    left: 20px;
+    width: calc(100% - 40px); /* Ocupa a largura considerando o padding */
     
     opacity: 0; /* Começa invisível */
-    transform: translateY(10px); /* Começa um pouco abaixo */
+    transform: translateY(15px); /* Começa um pouco abaixo */
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+/* O botão se torna visível e sobe para a posição final ao passar o mouse */
 .featured-products-section .product-card:hover .add-to-cart-btn {
-    opacity: 1; /* Fica visível */
-    transform: translateY(0); /* Sobe para a posição final */
+    opacity: 1;
+    transform: translateY(0);
 }
 
 
-/* Ajustes de responsividade para a grade de produtos */
+/* --- Ajustes de responsividade para a grade de produtos --- */
 @media (max-width: 992px) {
     .featured-products-section .product-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* 3 colunas em tablets */
     }
 }
 
 @media (max-width: 768px) {
     .featured-products-section .product-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* 2 colunas em celulares */
+    }
+    
+    /* Em telas pequenas, o botão fica sempre visível para facilitar o toque */
+    .featured-products-section .add-to-cart-btn {
+        opacity: 1;
+        transform: translateY(0);
+        position: static; /* Volta ao fluxo normal do documento */
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .featured-products-section .card-info-wrapper {
+        padding-bottom: 0; /* Remove o padding extra */
     }
 }

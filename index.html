@@ -57,20 +57,64 @@
     <main>
         <section class="hero-section">
             <div class="container">
-                <h1>A beleza está nos detalhes</h1>
-                <p>Encontre o acessório perfeito que expressa quem você é.</p>
-                <a href="src/html/listagem_produtos.html" class="btn btn-primary">Ver todos os produtos</a>
+                <div class="hero-content">
+                    <h1>A beleza está nos detalhes</h1>
+                    <p>Encontre o acessório em aço que expressa quem você é.</p>
+                    <a href="/src/html/listagem_produtos.html" class="btn btn-primary btn-lg">Ver todos os produtos</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <div class="container">
+                <h2 class="section-title">Navegue por Categorias</h2>
+                <div class="categories-grid">
+                    <a href="/src/html/listagem_produtos.html?categoria_id=1" class="category-card">
+                        <img src="https://res.cloudinary.com/dceqv2nwa/image/upload/v1754320205/anuli_produtos/kio0tqjy4nkdldvp7dn7.jpg"
+                            alt="Anéis">
+                        <div class="category-name">Anéis</div>
+                    </a>
+                    <a href="/src/html/listagem_produtos.html?categoria_id=2" class="category-card">
+                        <img src="https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=600"
+                            alt="Berloque">
+                        <div class="category-name">Berloque</div>
+                    </a>
+                    <a href="/src/html/listagem_produtos.html?categoria_id=3" class="category-card">
+                        <img src="https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=600"
+                            alt="Brincos">
+                        <div class="category-name">Brincos</div>
+                    </a>
+                    <a href="/src/html/listagem_produtos.html?categoria_id=4" class="category-card">
+                        <img src="https://images.pexels.com/photos/9425233/pexels-photo-9425233.jpeg?auto=compress&cs=tinysrgb&w=600"
+                            alt="Conjuntos">
+                        <div class="category-name">Conjuntos</div>
+                    </a>
+                    <a href="/src/html/listagem_produtos.html?categoria_id=5" class="category-card">
+                        <img src="https://images.pexels.com/photos/9425233/pexels-photo-9425233.jpeg?auto=compress&cs=tinysrgb&w=600"
+                            alt="Colares">
+                        <div class="category-name">Colares</div>
+                    </a>
+
+                    <a href="/src/html/listagem_produtos.html?categoria_id=6" class="category-card">
+                        <img src="https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?auto=compress&cs=tinysrgb&w=600"
+                            alt="Pulseiras">
+                        <div class="category-name">Pulseiras</div>
+                    </a>
+
+
+                </div>
             </div>
         </section>
 
         <section class="featured-products-section">
             <div class="container">
-                <h2>Produtos em Destaque</h2>
-                <div class="product-grid">
+                <h2 class="section-title">Produtos em Destaque</h2>
+                <div class="product-grid" id="featured-products-grid">
                     <p>Carregando produtos...</p>
                 </div>
             </div>
         </section>
+
     </main>
 
     <footer class="main-footer">
