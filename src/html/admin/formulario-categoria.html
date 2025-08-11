@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Produto - Admin</title>
+    <title>Formulário de Categoria - Admin</title>
+
     <link rel="stylesheet" href="../../css/global.css">
     <link rel="stylesheet" href="../../css/components/button.css">
     <link rel="stylesheet" href="../../css/pages/admin.css">
 </head>
 
 <body class="admin-body">
-
     <div class="admin-layout">
-<aside class="admin-sidebar">
+        <aside class="admin-sidebar">
             <div class="sidebar-header">
                 <p>ANULI</p>
             </div>
@@ -100,113 +100,34 @@
 
         <main class="admin-content">
             <div class="content-header">
-                <h1 id="form-title">Adicionar Novo Produto</h1>
+                <h1 id="form-title">Adicionar Nova Categoria</h1>
             </div>
-
             <div class="table-container">
-                <form id="product-form" class="admin-form">
-
-                    <div class="form-grid">
-
-                        <div class="form-main-column">
-                            <div class="form-card">
-                                <h4>Informações Básicas</h4>
-                                <div class="form-group">
-                                    <label for="nome">Nome do Produto</label>
-                                    <input type="text" id="nome" name="nome" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="descricao">Descrição</label>
-                                    <textarea id="descricao" name="descricao" rows="4"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-card">
-                                <h4>Preço e Estoque</h4>
-                                <div class="form-grid-inline">
-                                    <div class="form-group">
-                                        <label for="preco">Preço (R$)</label>
-                                        <input type="number" id="preco" name="preco" step="0.01" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="quantidade_estoque">Estoque</label>
-                                        <input type="number" id="quantidade_estoque" name="quantidade_estoque" required>
-                                    </div>
-                                </div>
-                            </div>
+                <form id="category-form" class="admin-form">
+                    <div class="form-card">
+                        <div class="form-group">
+                            <label for="nome">Nome da Categoria</label>
+                            <input type="text" id="nome" required>
                         </div>
 
-                        <div class="form-sidebar-column">
-                            <div class="form-card">
-                                <h4>Organização</h4>
-                                <div class="form-group has-button">
-                                    <label for="fornecedor_id">Fornecedor</label>
-                                    <select id="fornecedor_id" name="fornecedor_id"></select>
-                                </div>
-                                <div class="form-group has-button">
-                                    <label for="categoria_id">Categoria</label>
-                                    <select id="categoria_id" name="categoria_id" required></select>
-                                </div>
-                            </div>
-
-                            <div class="form-card">
-                                <h4>Imagens do Produto</h4>
-                                <p class="form-hint">A primeira imagem será a principal.</p>
-                                <input type="file" id="imagens" name="imagens[]" multiple>
-                                <div id="image-preview"></div>
-                            </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <textarea id="descricao" rows="4"
+                                placeholder="Digite uma breve descrição para a categoria..."></textarea>
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Salvar Produto</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                 </form>
             </div>
         </main>
     </div>
 
-    <div id="add-fornecedor-modal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Adicionar Novo Fornecedor</h3>
-                <button id="close-fornecedor-modal" class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="new-fornecedor-form" class="admin-form">
-                    <div class="form-group">
-                        <label for="fornecedor-nome">Nome do Fornecedor</label>
-                        <input type="text" id="fornecedor-nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="fornecedor-cnpj">CNPJ</label>
-                        <input type="text" id="fornecedor-cnpj">
-                    </div>
-                    <div class="form-group">
-                        <label for="fornecedor-contato">Contato</label>
-                        <input type="text" id="fornecedor-contato">
-                    </div>
-                    <div class="form-group">
-                        <label for="fornecedor-endereco">Endereço</label>
-                        <input type="text" id="fornecedor-endereco">
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Salvar Fornecedor</button>
-                    </div>
-                    <p id="modal-error-message" class="error-text"></p>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="add-categoria-modal" class="modal-overlay hidden">
-        <div class="modal-content">
-        </div>
-    </div>
-
     <script src="../../js/apiConfig.js" type="module"></script>
     <script src="../../js/apiService.js" type="module"></script>
     <script src="../../js/modules/authManager.js" type="module"></script>
-    <script src="../../js/modules/product-form.js" type="module"></script>
+    <script src="../../js/modules/formulario-categoria.js" type="module"></script>
 </body>
 
 </html>

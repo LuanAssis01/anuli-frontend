@@ -1,8 +1,5 @@
-// src/js/modules/product-form.js
-
 import { fetchWithAuth } from '../apiService.js';
 import { authManager } from './authManager.js';
-import { API_BASE_URL } from '../apiConfig.js';
 
 /**
  * Função de segurança que verifica se o utilizador está logado e é um administrador.
@@ -32,24 +29,26 @@ async function initProductForm() {
     const imageInput = document.getElementById('imagens');
     const imagePreviewContainer = document.getElementById('image-preview');
 
-    // --- Seletores para o Modal de Fornecedor ---
+    // --- Seletores dos Modais ---
     const addFornecedorModal = document.getElementById('add-fornecedor-modal');
-    const openFornecedorModalBtn = document.createElement('button');
     const closeFornecedorModalBtn = document.getElementById('close-fornecedor-modal');
     const newFornecedorForm = document.getElementById('new-fornecedor-form');
+    
+    const addCategoriaModal = document.getElementById('add-categoria-modal');
+    const closeCategoriaModalBtn = document.getElementById('close-categoria-modal');
+    const newCategoriaForm = document.getElementById('new-categoria-form');
 
     // --- Detecção de Modo ---
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('id');
     const isEditMode = !!productId;
 
-    /**
-     * Carrega as categorias no select.
-     */
+    // --- Funções de Carregamento de Dados ---
     async function loadCategories() {
         if (!categoryInput) return;
         try {
             const categories = await fetchWithAuth('/api/categoria');
+            const currentValue = categoryInput.value;
             categoryInput.innerHTML = '<option value="">Selecione uma categoria</option>';
             categories.forEach(category => {
                 const option = document.createElement('option');
@@ -57,14 +56,10 @@ async function initProductForm() {
                 option.textContent = category.nome;
                 categoryInput.appendChild(option);
             });
-        } catch (error) {
-            console.error('Erro ao carregar categorias:', error);
-        }
+            categoryInput.value = currentValue;
+        } catch (error) { console.error('Erro ao carregar categorias:', error); }
     }
 
-    /**
-     * Carrega os fornecedores no select.
-     */
     async function loadFornecedores() {
         if (!fornecedorInput) return;
         try {
@@ -78,75 +73,98 @@ async function initProductForm() {
                 fornecedorInput.appendChild(option);
             });
             fornecedorInput.value = currentValue;
-        } catch (error) {
-            console.error('Erro ao carregar fornecedores:', error);
-        }
+        } catch (error) { console.error('Erro ao carregar fornecedores:', error); }
     }
 
     /**
-     * Configura toda a lógica do modal de fornecedor.
+     * ⭐ MELHORIA: Função genérica para configurar qualquer modal com um botão "Novo" ⭐
+     * @param {object} config - Objeto de configuração para o modal.
      */
-    function setupFornecedorModal() {
-        if (!fornecedorInput || !addFornecedorModal) return;
+    function setupModal(config) {
+        const { triggerInput, modalElement, closeBtn, formElement, newButtonText, submitHandler } = config;
         
-        // Adiciona o botão "Novo" ao lado do select de fornecedor
-        openFornecedorModalBtn.textContent = 'Novo';
-        openFornecedorModalBtn.type = 'button';
-        openFornecedorModalBtn.className = 'add-new-btn';
-        fornecedorInput.parentElement.style.display = 'flex';
-        fornecedorInput.parentElement.style.alignItems = 'center';
-        fornecedorInput.parentElement.appendChild(openFornecedorModalBtn);
-        
-        openFornecedorModalBtn.addEventListener('click', () => addFornecedorModal.classList.remove('hidden'));
-        closeFornecedorModalBtn.addEventListener('click', () => addFornecedorModal.classList.add('hidden'));
-        addFornecedorModal.addEventListener('click', (e) => {
-            if (e.target === addFornecedorModal) {
-                addFornecedorModal.classList.add('hidden');
-            }
+        if (!triggerInput || !modalElement) return;
+
+        const openBtn = document.createElement('button');
+        openBtn.textContent = newButtonText;
+        openBtn.type = 'button';
+        openBtn.className = 'add-new-btn';
+        triggerInput.parentElement.appendChild(openBtn);
+
+        openBtn.addEventListener('click', () => modalElement.classList.remove('hidden'));
+        if (closeBtn) closeBtn.addEventListener('click', () => modalElement.classList.add('hidden'));
+        modalElement.addEventListener('click', (e) => {
+            if (e.target === modalElement) modalElement.classList.add('hidden');
         });
-
-        newFornecedorForm.addEventListener('submit', handleNewFornecedorSubmit);
+        if (formElement) formElement.addEventListener('submit', submitHandler);
     }
 
-    /**
-     * Lida com o envio do formulário do novo fornecedor.
-     */
+    // --- Funções de Submissão dos Modais ---
     async function handleNewFornecedorSubmit(event) {
         event.preventDefault();
         const errorMessage = document.getElementById('modal-error-message');
-        errorMessage.textContent = '';
-
+        if (errorMessage) errorMessage.textContent = '';
         const payload = {
             nome: document.getElementById('fornecedor-nome').value,
             cnpj: document.getElementById('fornecedor-cnpj').value,
             contato: document.getElementById('fornecedor-contato').value,
             endereco: document.getElementById('fornecedor-endereco').value,
         };
-
         try {
-            const newFornecedor = await fetchWithAuth('/api/fornecedores', {
-                method: 'POST',
-                body: payload
-            });
-
+            const newFornecedor = await fetchWithAuth('/api/fornecedores', { method: 'POST', body: payload });
             addFornecedorModal.classList.add('hidden');
             newFornecedorForm.reset();
-            await loadFornecedores(); // Recarrega a lista
-            fornecedorInput.value = newFornecedor.id; // Seleciona o novo fornecedor
-
+            await loadFornecedores();
+            fornecedorInput.value = newFornecedor.id;
         } catch (error) {
-            errorMessage.textContent = error.message;
+            if (errorMessage) errorMessage.textContent = error.message;
             console.error('Erro ao criar fornecedor:', error);
         }
     }
 
-    // Carrega categorias e fornecedores em paralelo
+    async function handleNewCategoriaSubmit(event) {
+        event.preventDefault();
+        const errorMessage = document.getElementById('modal-categoria-error');
+        if (errorMessage) errorMessage.textContent = '';
+        const payload = {
+            nome: document.getElementById('categoria-nome').value,
+        };
+        try {
+            const newCategoria = await fetchWithAuth('/api/categoria', { method: 'POST', body: payload });
+            addCategoriaModal.classList.add('hidden');
+            newCategoriaForm.reset();
+            await loadCategories();
+            categoryInput.value = newCategoria.id;
+        } catch (error) {
+            if (errorMessage) errorMessage.textContent = error.message;
+            console.error('Erro ao criar categoria:', error);
+        }
+    }
+
+    // --- Lógica Principal de Inicialização ---
     await Promise.all([loadCategories(), loadFornecedores()]);
     
-    // Configura o modal depois de tudo carregado
-    setupFornecedorModal();
+    // ⭐ MELHORIA: Usa a função genérica para configurar os dois modais ⭐
+    setupModal({
+        triggerInput: fornecedorInput,
+        modalElement: addFornecedorModal,
+        closeBtn: closeFornecedorModalBtn,
+        formElement: newFornecedorForm,
+        newButtonText: 'Novo',
+        submitHandler: handleNewFornecedorSubmit
+    });
 
-    // --- Preenche o formulário em modo de edição ---
+    setupModal({
+        triggerInput: categoryInput,
+        modalElement: addCategoriaModal,
+        closeBtn: closeCategoriaModalBtn,
+        formElement: newCategoriaForm,
+        newButtonText: 'Nova',
+        submitHandler: handleNewCategoriaSubmit
+    });
+
+
+    // --- Preenche o Formulário (Modo Edição) ---
     if (isEditMode) {
         if (formTitle) formTitle.textContent = 'Editar Produto';
         try {
@@ -159,13 +177,11 @@ async function initProductForm() {
             if (fornecedorInput) fornecedorInput.value = product.fornecedor_id;
 
             if (imagePreviewContainer && product.imagens?.length) {
-                const currentImagesHeader = document.createElement('p');
-                currentImagesHeader.textContent = 'Imagens Atuais:';
-                imagePreviewContainer.appendChild(currentImagesHeader);
+                imagePreviewContainer.innerHTML = '<p class="form-hint">Imagens Atuais:</p>';
                 product.imagens.forEach(img => {
                     const imgEl = document.createElement('img');
-                    imgEl.src = img.url
-                    imgEl.style.cssText = 'max-width: 100px; border-radius: 6px; margin: 5px;';
+                    imgEl.src = img.url;
+                    imgEl.style.cssText = 'max-width: 100px; border-radius: 6px; margin-top: 5px;';
                     imagePreviewContainer.appendChild(imgEl);
                 });
             }
@@ -176,8 +192,8 @@ async function initProductForm() {
     } else {
         if (formTitle) formTitle.textContent = 'Criar Novo Produto';
     }
-
-    // --- Lógica de Envio do Formulário Principal ---
+    
+    // --- Lida com o Envio do Formulário Principal ---
     if (form) {
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -188,10 +204,9 @@ async function initProductForm() {
             formData.append('preco', priceInput.value);
             formData.append('quantidade_estoque', stockInput.value);
             formData.append('categoria_id', categoryInput.value);
-            formData.append('fornecedor_id', fornecedorInput.value);
+            formData.append('fornecedor_id', fornecedorInput.value || '');
 
             if (imageInput.files.length > 0) {
-                // ... (sua lógica de conversão de HEIC, se aplicável)
                 for (const file of imageInput.files) {
                     formData.append('imagens', file);
                 }
@@ -201,14 +216,9 @@ async function initProductForm() {
             const url = isEditMode ? `/api/produtos/${productId}` : '/api/produtos';
 
             try {
-                await fetchWithAuth(url, {
-                    method: method,
-                    body: formData
-                });
-
+                await fetchWithAuth(url, { method: method, body: formData });
                 alert(`Produto ${isEditMode ? 'atualizado' : 'criado'} com sucesso!`);
                 window.location.href = 'produtos.html';
-
             } catch (error) {
                 console.error('Erro ao enviar formulário:', error);
                 alert(error.message);
