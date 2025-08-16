@@ -230,23 +230,20 @@
     max-width: 500px;
 }
 
-/* =================================
-   RESPONSIVIDADE (JÁ INCLUI AS NOVAS SEÇÕES)
-   ================================= */
-
 @media (max-width: 900px) {
     .account-layout {
         grid-template-columns: 1fr;
         gap: 0;
     }
 
+    /* Transforma o menu em uma barra de abas horizontal */
     .account-sidebar {
         position: static;
         border: none;
+        padding: 0;
         margin-bottom: 30px;
         border-bottom: 1px solid #dee2e6;
     }
-
     .account-sidebar ul {
         display: flex;
         overflow-x: auto;
@@ -254,11 +251,9 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
-
     .account-sidebar ul::-webkit-scrollbar {
         display: none;
     }
-
     .account-sidebar ul li a {
         flex-shrink: 0;
         padding: 15px 20px;
@@ -269,12 +264,10 @@
         border-bottom: 3px solid transparent;
         text-align: center;
     }
-
     .account-sidebar ul li a:hover {
         background-color: #f8f9fa;
         color: #000;
     }
-
     .account-sidebar ul li a.active {
         color: var(--azul-principal);
         font-weight: 600;
@@ -284,13 +277,23 @@
 }
 
 @media (max-width: 768px) {
+    /* Ajustes finos para celulares */
     .account-page-container {
         padding-top: 20px;
         padding-bottom: 40px;
     }
 
+    /* ⭐ NOVO: Estilo de "Card" para o conteúdo principal no mobile ⭐ */
+    .account-content {
+        background-color: var(--branco-fundo);
+        padding: 20px;
+        border-radius: var(--raio-borda);
+        border: 1px solid #eee;
+    }
+
     .account-content h2 {
         font-size: 22px;
+        margin-top: 0; /* Remove a margem do topo do título */
     }
 
     /* Grid do formulário de endereço vira coluna única */

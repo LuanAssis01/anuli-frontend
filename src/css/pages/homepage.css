@@ -35,29 +35,32 @@
 
 /* --- 2. Seção de Categorias --- */
 .categories-section {
-    padding: 80px 0;
+    padding: 60px 0; /* Menos padding em geral */
     background-color: #f8f9fa;
 }
 
+/* Esconde o título da seção apenas em telas de celular para um visual mais limpo */
+.categories-section .section-title {
+    margin-bottom: 30px;
+}
+
+/* Desktop: Mantém a grade de 6 colunas */
 .categories-grid {
     display: grid;
-    /* ⭐ MUDANÇA PRINCIPAL: Grade de 6 colunas para caber em uma linha ⭐ */
     grid-template-columns: repeat(6, 1fr);
-    gap: 20px; /* Espaçamento ajustado */
+    gap: 20px;
 }
 
 .category-card {
     position: relative;
     overflow: hidden;
     border-radius: var(--raio-borda);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     display: block;
     text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
-
 .category-card img {
     width: 100%;
-    /* ⭐ ALTURA AJUSTADA para a nova largura da coluna ⭐ */
     height: 220px;
     object-fit: cover;
     transition: transform 0.4s ease;
@@ -65,7 +68,6 @@
 .category-card:hover img {
     transform: scale(1.1);
 }
-
 .category-name {
     position: absolute;
     bottom: 0;
@@ -74,11 +76,10 @@
     background: linear-gradient(transparent, rgba(0,0,0,0.75));
     color: var(--branco-fundo);
     padding: 30px 10px 15px 10px;
-    /* ⭐ TAMANHO DA FONTE AJUSTADO ⭐ */
     font-size: 16px;
     font-weight: 600;
-    transition: all 0.3s ease;
     text-align: center;
+    transition: all 0.3s ease;
 }
 
 
@@ -177,10 +178,47 @@
 }
 
 
-/* --- Ajustes de responsividade para a grade de produtos --- */
+/* ⭐ AJUSTE PRINCIPAL: RESPONSIVIDADE MOBILE-FIRST ⭐ */
 @media (max-width: 992px) {
-    .featured-products-section .product-grid {
-        grid-template-columns: repeat(3, 1fr); /* 3 colunas em tablets */
+    /* Em telas de tablet, a seção vira um SLIDER HORIZONTAL */
+    .categories-section .container {
+        /* Remove o padding lateral do container para o slider ir até as bordas */
+        padding: 0; 
+    }
+    
+    .categories-section .section-title {
+        /* Adiciona padding para o título não colar nas bordas */
+        padding: 0 20px;
+    }
+
+    .categories-grid {
+        display: flex; /* Muda de grid para flex para criar a linha horizontal */
+        overflow-x: auto; /* ATIVA A ROLAGEM HORIZONTAL */
+        gap: 15px;
+        padding: 0 20px 20px 20px; /* Adiciona padding para o conteúdo não colar nas bordas */
+        
+        /* Melhora a experiência de rolagem em dispositivos de toque */
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch; /* Rolagem suave no iOS */
+    }
+    
+    /* Esconde a barra de rolagem visualmente, mas mantém a funcionalidade */
+    .categories-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-card {
+        flex: 0 0 150px; /* Cada card terá uma largura fixa de 150px */
+        scroll-snap-align: start; /* Faz os cards "pararem" no lugar ao rolar */
+    }
+
+    .category-card img {
+        height: 180px; /* Altura ajustada para o novo tamanho */
+    }
+
+    .category-name {
+        font-size: 14px;
+        padding: 20px 10px 10px 10px;
     }
 }
 
