@@ -11,9 +11,9 @@
 /* --- 1. Hero Section --- */
 .hero-section {
     background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-        url('https://images.pexels.com/photos/14588663/pexels-photo-14588663.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        url('https://res.cloudinary.com/dceqv2nwa/image/upload/v1755395457/WhatsApp_Image_2025-08-16_at_22.50.27_xvtmsc.jpg');
     background-size: cover;
-    background-position: center 70%;
+    background-position: center center;
     color: var(--branco-fundo);
     padding: 160px 0;
     text-align: center;
@@ -223,6 +223,13 @@
 }
 
 @media (max-width: 768px) {
+    .hero-section {
+        /* Exemplo: Centraliza a imagem no celular */
+        background-position: center center; 
+        
+        /* Você pode também diminuir a altura da seção no celular */
+        padding: 120px 0;
+    }
     .featured-products-section .product-grid {
         grid-template-columns: repeat(2, 1fr); /* 2 colunas em celulares */
     }
