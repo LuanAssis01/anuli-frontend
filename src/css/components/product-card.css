@@ -123,3 +123,49 @@
     border-color: #ccc;
     cursor: not-allowed; /* Muda o cursor do mouse */
 }
+
+.product-card .card-image {
+    position: relative; /* Essencial para a sobreposição funcionar */
+}
+
+/* 2. Estilo da faixa "Esgotado" */
+.sold-out-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo preto com 60% de opacidade */
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    
+    /* Centraliza o texto "Esgotado" perfeitamente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Garante que o link da imagem por baixo ainda seja clicável */
+    pointer-events: none;
+    
+    /* Efeito suave de aparição */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* 3. Faz a faixa aparecer quando o card tiver a classe .is-sold-out */
+.product-card.is-sold-out .sold-out-overlay {
+    opacity: 1;
+}
+
+/* 4. Estilo para o card inteiro e o botão quando o produto está esgotado */
+.product-card.is-sold-out {
+    opacity: 0.7; /* Deixa o card inteiro levemente apagado */
+}
+
+.product-card.is-sold-out .add-to-cart-btn {
+    background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed; /* Muda o cursor do mouse para indicar que não é clicável */
+}
