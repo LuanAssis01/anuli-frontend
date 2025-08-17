@@ -28,13 +28,13 @@
             <nav class="main-nav">
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/src/html/listagem_produtos.html">Produtos</a></li>
-                    <li><a href="/src/html/institucional/sobre_nos.html">Sobre Nós</a></li>
-                    <li><a href="/src/html/institucional/contato.html">Contato</a></li>
+                    <li><a href="./listagem_produtos.html">Produtos</a></li>
+                    <li><a href="./institucional/sobre_nos.html">Sobre Nós</a></li>
+                    <li><a href="./institucional/contato.html">Contato</a></li>
                 </ul>
             </nav>
             <div class="header-actions">
-                <a href="/src/html/compra/carrinho_compras.html" class="action-link" aria-label="Carrinho de Compras">
+                <a href="./compra/carrinho_compras.html" class="action-link" aria-label="Carrinho de Compras">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="9" cy="21" r="1"></circle>
@@ -42,7 +42,7 @@
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
                 </a>
-                <a href="/src/html/conta/minha_conta.html" class="action-link" aria-label="Minha Conta"
+                <a href="./conta/minha_conta.html" class="action-link" aria-label="Minha Conta"
                     id="account-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -62,14 +62,56 @@
         </div>
     </header>
 
-
-    <main>
+   <main>
         <section class="hero-section">
             <div class="container">
                 <div class="hero-content">
                     <h1>A beleza está nos detalhes</h1>
-                    <p>Encontre o acessório perfeito que expressa quem você é.</p>
-                    <a href="listagem_produtos.html" class="btn btn-primary">Ver todos os produtos</a>
+                    <p>Encontre o acessório em aço que expressa quem você é.</p>
+                    <a href="./listagem_produtos.html" class="btn btn-primary btn-lg">Ver todos os produtos</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <div class="container">
+                <h2 class="section-title">Navegue por Categorias</h2>
+                <div class="categories-grid">
+                    <a href="./listagem_produtos.html?categoria_id=1" class="category-card">
+                        <img src="https://res.cloudinary.com/dceqv2nwa/image/upload/v1754320203/anuli_produtos/yl7aguayhblz4gnklva0.jpg"
+                            alt="Anéis">
+                        <div class="category-name">Anéis</div>
+                    </a>
+                    <a href="./listagem_produtos.html?categoria_id=2" class="category-card">
+                        <img src="https://res.cloudinary.com/dceqv2nwa/image/upload/v1755396018/WhatsApp_Image_2025-08-16_at_22.55.09_1_nhttml.jpg"
+                            alt="Berloque">
+                        <div class="category-name">Berloque</div>
+                    </a>
+                    <a href="./listagem_produtos.html?categoria_id=3" class="category-card">
+                        <img src="https://res.cloudinary.com/dceqv2nwa/image/upload/v1754316011/anuli_produtos/afik4selilmlv1lmxmso.jpg"
+                            alt="Brincos">
+                        <div class="category-name">Brincos</div>
+                    </a>
+
+                    <a href="./listagem_produtos.html?categoria_id=5" class="category-card">
+                        <img src="https://res.cloudinary.com/dceqv2nwa/image/upload/v1755395942/WhatsApp_Image_2025-08-16_at_22.55.09_o2ahph.jpg"
+                            alt="Colares">
+                        <div class="category-name">Colares</div>
+                    </a>
+
+                    <a href="./listagem_produtos.html?categoria_id=4" class="category-card">
+                        <img src="https://res.cloudinary.com/dceqv2nwa/image/upload/v1754320336/anuli_produtos/vwll0aqlvtys6ao1dwiq.jpg"
+                            alt="Conjuntos">
+                        <div class="category-name">Conjuntos</div>
+                    </a>
+
+                    <a href="./listagem_produtos.html?categoria_id=6" class="category-card">
+                        <img src="https://res.cloudinary.com/dceqv2nwa/image/upload/v1754874533/anuli_produtos/jhtdj9cmeuwbmvw4ha29.jpg"
+                            alt="Pulseiras">
+                        <div class="category-name">Pulseiras</div>
+                    </a>
+
+
                 </div>
             </div>
         </section>
@@ -77,46 +119,12 @@
         <section class="featured-products-section">
             <div class="container">
                 <h2 class="section-title">Produtos em Destaque</h2>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="card-image"><a href="detalhes_produto.html"><img
-                                    src="https://via.placeholder.com/300x300.png?text=Produto" alt="Produto"></a></div>
-                        <div class="card-content"><span class="card-category">Anéis</span>
-                            <h4 class="card-title"><a href="detalhes_produto.html">Anel Dourado Minimalista</a></h4>
-                            <p class="card-price">R$ 89,90</p><button class="btn btn-primary">Adicionar ao
-                                Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="card-image"><a href="detalhes_produto.html"><img
-                                    src="https://via.placeholder.com/300x300.png?text=Produto" alt="Produto"></a></div>
-                        <div class="card-content"><span class="card-category">Colares</span>
-                            <h4 class="card-title"><a href="detalhes_produto.html">Colar de Prata</a></h4>
-                            <p class="card-price">R$ 120,00</p><button class="btn btn-primary">Adicionar ao
-                                Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="card-image"><a href="detalhes_produto.html"><img
-                                    src="https://via.placeholder.com/300x300.png?text=Produto" alt="Produto"></a></div>
-                        <div class="card-content"><span class="card-category">Brincos</span>
-                            <h4 class="card-title"><a href="detalhes_produto.html">Brinco de Pérola</a></h4>
-                            <p class="card-price">R$ 75,50</p><button class="btn btn-primary">Adicionar ao
-                                Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="card-image"><a href="detalhes_produto.html"><img
-                                    src="https://via.placeholder.com/300x300.png?text=Produto" alt="Produto"></a></div>
-                        <div class="card-content"><span class="card-category">Pulseiras</span>
-                            <h4 class="card-title"><a href="detalhes_produto.html">Pulseira Delicada</a></h4>
-                            <p class="card-price">R$ 60,00</p><button class="btn btn-primary">Adicionar ao
-                                Carrinho</button>
-                        </div>
-                    </div>
+                <div class="product-grid" id="featured-products-grid">
+                    <p>Carregando produtos...</p>
                 </div>
             </div>
         </section>
+
     </main>
 
     <footer class="main-footer">
