@@ -35,19 +35,40 @@ export async function fetchAndRenderProducts() {
 
 function createProductCard(product) {
     const card = document.createElement('div');
-    card.className = 'product-card';
+    
+    // ⭐ 1. Verifica se o produto está esgotado
+    const isSoldOut = product.estoque === 0;
+
+    // Adiciona uma classe ao card principal se estiver esgotado
+    card.className = isSoldOut ? 'product-card is-sold-out' : 'product-card';
+
     const imageUrl = product.imagens && product.imagens.length > 0 ? product.imagens[0].url : 'https://placehold.co/300x300/eee/ccc?text=Sem+Imagem';
     const price = parseFloat(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    // ⭐ 2. Cria a tag "Esgotado" e o botão dinamicamente
+    const soldOutOverlay = isSoldOut ? '<div class="sold-out-overlay">Esgotado</div>' : '';
+    
+    const cartButton = isSoldOut 
+        ? '<button type="button" class="btn btn-primary full-width add-to-cart-btn" disabled>Produto Esgotado</button>'
+        : `<button type="button" class="btn btn-primary full-width add-to-cart-btn" data-product-id="${product.id}">Adicionar ao Carrinho</button>`;
+
+    // ⭐ 3. Monta o HTML do card com as novas condições
     card.innerHTML = `
-        <div class="card-image"><a href="/src/html/detalhes_produto.html?id=${product.id}"><img src="${imageUrl}" alt="${product.nome}"></a></div>
+        <div class="card-image">
+            <a href="/src/html/detalhes_produto.html?id=${product.id}">
+                <img src="${imageUrl}" alt="${product.nome}">
+            </a>
+            ${soldOutOverlay} {/* Insere a tag "Esgotado" aqui */}
+        </div>
         <div class="card-content">
             <div class="card-info-wrapper">
                 <span class="card-category">${product.categoria?.nome || 'Categoria'}</span>
                 <h4 class="card-title"><a href="/src/html/detalhes_produto.html?id=${product.id}">${product.nome}</a></h4>
                 <p class="card-price">${price}</p>
             </div>
-            <button type="button" class="btn btn-primary full-width add-to-cart-btn" data-product-id="${product.id}">Adicionar ao Carrinho</button>
+            ${cartButton} {/* Insere o botão (habilitado ou desabilitado) aqui */}
         </div>`;
+
     return card;
 }
 
